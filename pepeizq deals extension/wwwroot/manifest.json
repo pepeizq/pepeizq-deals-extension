@@ -1,0 +1,40 @@
+﻿{
+  "manifest_version": 3,
+  "name": "pepeizq's deals Extension",
+  "description": "My browser extension built with Blazor WebAssembly",
+  "version": "0.1",
+  "background": {
+    "service_worker": "content/BackgroundWorker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "host_permissions": [
+    "https://pepeizqdeals.com/*"
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "content_scripts": [
+    {
+      "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],
+      "matches": [ "*://*/*" ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "framework/*",
+        "content/*",
+        "app.js",
+        "imagenes/*"
+      ],
+      "matches": [ "<all_urls>" ]
+    }
+  ]
+}

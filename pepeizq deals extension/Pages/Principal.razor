@@ -1,0 +1,145 @@
+﻿@page "/principal.html"
+@inherits BasePage
+
+@using System.Text.Json
+
+@inject NavigationManager NavManager
+
+@if (minimoHistorico != null)
+{
+    <div class="caja">
+        <a href="@minimoHistorico.Enlace" target="_blank">
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+                @{
+                    Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(minimoHistorico.Tienda);
+
+                    if (tienda != null)
+                    {
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <img src="https://pepeizqdeals.com/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
+
+                            <div>
+                                @tienda.Nombre
+                            </div>
+                        </div>
+                    }
+                }
+
+                <span style="flex: 1;"></span>
+
+                <div style="padding: 10px 15px; background-color: var(--descuento);">
+                    @minimoHistorico.Descuento%
+                </div>
+
+                <div>
+                    @minimoHistorico.Precio€
+                </div>
+
+            </div>
+        </a>
+    </div>
+}
+
+<style>
+    :root {
+        --fondoOscuro: #002033;
+        --fondoBotonPequeño: #0d1621;
+        --fondoMinimo: #002c47;
+        --colorTexto: #f5f5f5;
+        --colorTextoHover: #b9e2fa;
+        --descuento: #006400;
+    }
+
+    .caja {
+        background-color: var(--fondoOscuro);
+        border: 2px solid var(--fondoMinimo);
+        border-radius: 5px;
+        padding: 10px 20px;
+        color: var(--colorTexto);
+        margin-bottom: 20px;
+        font-family: 'Motiva Sans', Sans-serif;
+        font-size: 18px;
+        transition: transform .2s;
+    }
+
+    .caja:hover {
+        color: var(--colorTextoHover);
+        transform: scale(1.01);
+        backdrop-filter: brightness(70%);
+    }
+</style>
+
+@code {
+
+    private string enlace = string.Empty;
+    private string id = string.Empty;
+    private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
+    private Herramientas.PepeizqdealsPrecio mejorActual = null;
+    private bool esMinimo = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        enlace = NavManager.Uri;
+
+        if (string.IsNullOrEmpty(enlace) == false)
+        {
+            if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
+            {
+                id = Herramientas.Steam.LimpiarId(enlace);
+
+                if (string.IsNullOrEmpty(id) == false)
+                {
+                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/api/steam/" + id);
+
+                    if (string.IsNullOrEmpty(html) == false)
+                    {
+                        Herramientas.Pepeizqdeals datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
+
+                        if (datos != null)
+                        {
+                            if (datos.Historicos != null)
+                            {
+                                if (datos.Historicos.Count > 0)
+                                {
+                                    foreach (var historico in datos.Historicos)
+                                    {
+                                        if (historico.DRM == 0 && DateTime.Now.Subtract(historico.FechaActualizacion) < TimeSpan.FromHours(24))
+                                        {
+                                            minimoHistorico = historico;
+                                            esMinimo = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (minimoHistorico == null)
+                            {
+                                if (datos.Actuales != null)
+                                {
+                                    if (datos.Actuales.Count > 0)
+                                    {
+                                        decimal precioMaximo = 1000000;
+
+                                        foreach (var actual in datos.Actuales)
+                                        {
+                                            if (actual.DRM == 0 && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
+                                            {
+                                                if (actual.Precio < precioMaximo)
+                                                {
+                                                    precioMaximo = actual.Precio;
+                                                    mejorActual = actual;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+    }
+}
