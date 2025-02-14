@@ -32,7 +32,9 @@
         "framework/*",
         "content/*",
         "app.js",
-        "imagenes/*"
+        "*.png",
+        "*.webp",
+        "*.ico"
       ],
       "matches": [ "<all_urls>" ]
     }

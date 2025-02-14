@@ -7,6 +7,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\app.js" />
     <Content Remove="wwwroot\app.js~RF1af55c0.TMP" />
+    <Content Remove="wwwroot\imagenes\tiendas\fanatical_icono.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Idiomas\Español.cs~RF2a754ef.TMP" />
+    <None Remove="Idiomas\Español.cs~RF306490a.TMP" />
     <None Remove="wwwroot\app.js~RF1af55c0.TMP" />
   </ItemGroup>
 

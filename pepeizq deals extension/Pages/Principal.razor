@@ -2,12 +2,40 @@
 @inherits BasePage
 
 @using System.Text.Json
+@using System.Globalization
 
 @inject NavigationManager NavManager
 
+@if (minimoHistorico != null && mejorActual == null)
+{
+    <div>
+        <a href="https://pepeizqdeals.com/game/@idPepeizq" target="_blank">
+            @string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String1"), "pepeizqdeals.com")
+        </a>
+
+        <div class="pepeizq-caja">
+            @Herramientas.Idiomas.BuscarTexto(idioma, "String2")
+
+            <div>
+            </div>
+        </div>
+        
+    </div>
+   
+}
+else if (minimoHistorico != null && mejorActual != null)
+{
+    if (minimoHistorico.Tienda == mejorActual.Tienda && minimoHistorico.Precio == mejorActual.Precio)
+    {
+        
+    }
+}
+
+
+
 @if (minimoHistorico != null)
 {
-    <div class="caja">
+    <div class="enlace">
         <a href="@minimoHistorico.Enlace" target="_blank">
             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
                 @{
@@ -16,7 +44,7 @@
                     if (tienda != null)
                     {
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <img src="https://pepeizqdeals.com/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
+                            <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
 
                             <div>
                                 @tienda.Nombre
@@ -42,17 +70,26 @@
 
 <style>
     :root {
-        --fondoOscuro: #002033;
-        --fondoBotonPequeño: #0d1621;
-        --fondoMinimo: #002c47;
-        --colorTexto: #f5f5f5;
-        --colorTextoHover: #b9e2fa;
-        --descuento: #006400;
+    --fondoOscuro: #002033;
+        --fondoBoton: #146a9c;
+    --fondoBotonPequeño: #0d1621;
+    --fondoBotonPequeñoHover: #060a0f;
+    --fondoMinimo: #002c47;
+    --colorTexto: #f5f5f5;
+    --colorTextoHover: #b9e2fa;
+    --descuento: #006400;
     }
 
-    .caja {
-        background-color: var(--fondoOscuro);
-        border: 2px solid var(--fondoMinimo);
+    .pepeizq-caja {
+        background-color: var(--fondoMinimo);
+        border: 2px solid var(--fondoOscuro);
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .pepeizq-enlace {
+        background-color: var(--fondoBotonPequeño);
+        border: 2px solid var(--fondoBoton);
         border-radius: 5px;
         padding: 10px 20px;
         color: var(--colorTexto);
@@ -60,36 +97,41 @@
         font-family: 'Motiva Sans', Sans-serif;
         font-size: 18px;
         transition: transform .2s;
-    }
+        }
 
-    .caja:hover {
-        color: var(--colorTextoHover);
-        transform: scale(1.01);
-        backdrop-filter: brightness(70%);
-    }
+        .pepeizq-enlace:hover {
+            color: var(--colorTextoHover);
+            transform: scale(1.01);
+            background-color: var(--fondoBotonPequeñoHover);
+        }
 </style>
 
 @code {
 
+    private string idExtension = string.Empty;
+    private string idioma = string.Empty;
     private string enlace = string.Empty;
-    private string id = string.Empty;
+    private string idSteam = string.Empty;
+    private string idPepeizq = string.Empty;
     private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
     private Herramientas.PepeizqdealsPrecio mejorActual = null;
     private bool esMinimo = false;
 
     protected override async Task OnInitializedAsync()
     {
+        idExtension = WebExtensions.I18n.GetMessage("@@extension_id");
+        idioma = CultureInfo.CurrentUICulture.Name;
         enlace = NavManager.Uri;
 
         if (string.IsNullOrEmpty(enlace) == false)
         {
             if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
             {
-                id = Herramientas.Steam.LimpiarId(enlace);
+                idSteam = Herramientas.Steam.LimpiarId(enlace);
 
-                if (string.IsNullOrEmpty(id) == false)
+                if (string.IsNullOrEmpty(idSteam) == false)
                 {
-                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/api/steam/" + id);
+                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/api/steam/" + idSteam);
 
                     if (string.IsNullOrEmpty(html) == false)
                     {
@@ -97,13 +139,15 @@
 
                         if (datos != null)
                         {
+                            idPepeizq = datos.Id.ToString();
+
                             if (datos.Historicos != null)
                             {
                                 if (datos.Historicos.Count > 0)
                                 {
                                     foreach (var historico in datos.Historicos)
                                     {
-                                        if (historico.DRM == 0 && DateTime.Now.Subtract(historico.FechaActualizacion) < TimeSpan.FromHours(24))
+                                        if (historico.DRM == 0)
                                         {
                                             minimoHistorico = historico;
                                             esMinimo = true;
