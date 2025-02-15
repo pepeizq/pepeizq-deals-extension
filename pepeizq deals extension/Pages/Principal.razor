@@ -6,34 +6,50 @@
 
 @inject NavigationManager NavManager
 
-@if (minimoHistorico != null && mejorActual == null)
+@if (idPepeizq > 0)
 {
-    <div>
+    <div class="pepeizq-caja-principal" style="display: flex; flex-direction: column; gap: 5px;">
         <a href="https://pepeizqdeals.com/game/@idPepeizq" target="_blank">
-            @string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String1"), "pepeizqdeals.com")
+            <div style="padding: 10px 15px; display: flex; align-items: center; gap: 10px;">
+                <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
+
+                @string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String1"), "pepeizqdeals.com")
+            </div>
         </a>
 
-        <div class="pepeizq-caja">
-            @Herramientas.Idiomas.BuscarTexto(idioma, "String2")
+        <div class="pepeizq-caja-info">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                @if (minimoHistorico != null)
+                {
+                    Herramientas.Tienda tiendaHistorica = Herramientas.Tiendas.Buscar(minimoHistorico.Tienda);
 
-            <div>
+                    <div>
+                        @Herramientas.Idiomas.BuscarTexto(idioma, "String3")
+                    </div>
+
+                    <div>
+                        @Herramientas.Precios.Euro(minimoHistorico.Precio) (@string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaActualizacion, idioma), tiendaHistorica))
+                    </div>     
+                }
+
             </div>
         </div>
+
+        @if (mejorActual == null)
+        {
+            <div style="padding: 10px 15px;">
+                @Herramientas.Idiomas.BuscarTexto(idioma, "String2")
+            </div>
+        }
         
     </div>
    
 }
-else if (minimoHistorico != null && mejorActual != null)
-{
-    if (minimoHistorico.Tienda == mejorActual.Tienda && minimoHistorico.Precio == mejorActual.Precio)
-    {
-        
-    }
-}
 
 
 
-@if (minimoHistorico != null)
+
+@* @if (minimoHistorico != null)
 {
     <div class="enlace">
         <a href="@minimoHistorico.Enlace" target="_blank">
@@ -66,7 +82,7 @@ else if (minimoHistorico != null && mejorActual != null)
             </div>
         </a>
     </div>
-}
+} *@
 
 <style>
     :root {
@@ -80,11 +96,21 @@ else if (minimoHistorico != null && mejorActual != null)
     --descuento: #006400;
     }
 
-    .pepeizq-caja {
+    .pepeizq-caja-principal {
+        background-color: var(--fondoOscuro);
+        border: 2px solid var(--fondoBotonPequeño);
+        border-radius: 5px;
+        padding: 5px;
+        color: var(--colorTexto);
+        font-family: 'Motiva Sans', Sans-serif;
+        font-size: 16px;
+    }
+
+    .pepeizq-caja-info {
         background-color: var(--fondoMinimo);
-        border: 2px solid var(--fondoOscuro);
-        border-radius: 10px;
-        padding: 15px;
+        border: 2px solid var(--fondoBotonPequeño);
+        border-radius: 5px;
+        padding: 10px 15px;
     }
 
     .pepeizq-enlace {
@@ -94,8 +120,8 @@ else if (minimoHistorico != null && mejorActual != null)
         padding: 10px 20px;
         color: var(--colorTexto);
         margin-bottom: 20px;
-        font-family: 'Motiva Sans', Sans-serif;
-        font-size: 18px;
+        
+        
         transition: transform .2s;
         }
 
@@ -112,7 +138,7 @@ else if (minimoHistorico != null && mejorActual != null)
     private string idioma = string.Empty;
     private string enlace = string.Empty;
     private string idSteam = string.Empty;
-    private string idPepeizq = string.Empty;
+    private int idPepeizq = 0;
     private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
     private Herramientas.PepeizqdealsPrecio mejorActual = null;
     private bool esMinimo = false;
@@ -139,7 +165,7 @@ else if (minimoHistorico != null && mejorActual != null)
 
                         if (datos != null)
                         {
-                            idPepeizq = datos.Id.ToString();
+                            idPepeizq = datos.Id;
 
                             if (datos.Historicos != null)
                             {

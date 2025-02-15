@@ -16,96 +16,106 @@ namespace Idiomas
 				new Herramientas.Idiomas.IdiomaValor
 				{
 					Id = "String2",
-					Valor = "Actualmente no hay ofertas"
+					Valor = "Actualmente no hay ofertas."
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator0",
+					Id = "String3",
+					Valor = "Mínimo histórico:"
+				},
+				new Herramientas.Idiomas.IdiomaValor
+				{
+					Id = "String4",
+					Valor = "{0} en {1}"
+				},
+				new Herramientas.Idiomas.IdiomaValor
+				{
+					Id = "Calculator.String0",
 					Valor = "hace 1 segundo"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator1",
+					Id = "Calculator.String1",
 					Valor = "hace {0} segundos"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator2",
+					Id = "Calculator.String2",
 					Valor = "hace {0} minutos"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator3",
+					Id = "Calculator.String3",
 					Valor = "hace 1 minuto"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator4",
+					Id = "Calculator.String4",
 					Valor = "hace {0} horas"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator5",
+					Id = "Calculator.String5",
 					Valor = "hace 1 hora"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator6",
+					Id = "Calculator.String6",
 					Valor = "hace {0} días"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator7",
+					Id = "Calculator.String7",
 					Valor = "hace 1 día y {0} horas"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator8",
+					Id = "Calculator.String8",
 					Valor = "hace {0} meses"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator9",
+					Id = "Calculator.String9",
 					Valor = "hace 1 mes y {0} días"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator10",
+					Id = "Calculator.String10",
 					Valor = "hace {0} años"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator11",
+					Id = "Calculator.String11",
 					Valor = "hace 1 año y {0} meses"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator12",
+					Id = "Calculator.String12",
 					Valor = "hace 1 año y 1 mes"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator13",
+					Id = "Calculator.String13",
 					Valor = "hace 1 año"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator14",
+					Id = "Calculator.String14",
 					Valor = "hace 1 mes y 1 día"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator15",
+					Id = "Calculator.String15",
 					Valor = "hace 1 mes"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator16",
+					Id = "Calculator.String16",
 					Valor = "hace 1 día y 1 hora"
 				},
 				new Herramientas.Idiomas.IdiomaValor
 				{
-					Id = "Calculator17",
+					Id = "Calculator.String17",
 					Valor = "hace 1 día"
 				}
 			];
