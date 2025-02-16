@@ -8,6 +8,19 @@ namespace Herramientas
 		{
 			List<Tienda> tiendas = new List<Tienda>();
 
+			#region Steam
+
+			Tienda steam = new Tienda
+			{
+				Id = "steam",
+				Nombre = "Steam",
+				Icono = "imagenes/tiendas/steam_icono.ico"
+			};
+
+			tiendas.Add(steam);
+
+			#endregion
+
 			#region Fanatical
 
 			Tienda fanatical = new Tienda

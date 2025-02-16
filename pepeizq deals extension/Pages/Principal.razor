@@ -5,15 +5,18 @@
 @using System.Globalization
 
 @inject NavigationManager NavManager
+@inject HttpClient Cliente
 
 @if (idPepeizq > 0)
 {
+    @datos.Actuales.Count
+
     <div class="pepeizq-caja-principal" style="display: flex; flex-direction: column; gap: 5px;">
         <a href="https://pepeizqdeals.com/game/@idPepeizq" target="_blank">
-            <div style="padding: 10px 15px; display: flex; align-items: center; gap: 10px;">
+            <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px;">
                 <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
 
-                @string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String1"), "pepeizqdeals.com")
+                @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String1"), "pepeizqdeals.com")
             </div>
         </a>
 
@@ -24,70 +27,80 @@
                     Herramientas.Tienda tiendaHistorica = Herramientas.Tiendas.Buscar(minimoHistorico.Tienda);
 
                     <div>
-                        @Herramientas.Idiomas.BuscarTexto(idioma, "String3")
+                        @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String3")
                     </div>
 
                     <div>
-                        @Herramientas.Precios.Euro(minimoHistorico.Precio) (@string.Format(Herramientas.Idiomas.BuscarTexto(idioma, "String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaActualizacion, idioma), tiendaHistorica))
+                        @{
+                            string mensajeMinimo = string.Empty;
+
+                            if (mejorActual != null)
+                            {
+                                if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
+                                {
+                                    mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String5"), tiendaHistorica.Nombre) + ")";
+                                }
+                            }
+
+                            if (string.IsNullOrEmpty(mensajeMinimo) == true)
+                            {
+                                mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, idiomaContenido), tiendaHistorica) + ")";
+                            }
+                        }
+
+                        @mensajeMinimo
                     </div>     
                 }
-
             </div>
         </div>
 
         @if (mejorActual == null)
         {
             <div style="padding: 10px 15px;">
-                @Herramientas.Idiomas.BuscarTexto(idioma, "String2")
+                @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String2")
             </div>
         }
-        
-    </div>
-   
-}
+        else
+        {
+            <div class="pepeizq-enlace">
+                <a href="@mejorActual.Enlace" target="_blank">
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+                        @{
+                            Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
 
+                            if (tienda != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
 
+                                    <div>
+                                        @tienda.Nombre
+                                    </div>
+                                </div>
+                            }
+                        }
 
+                        <span style="flex: 1;"></span>
 
-@* @if (minimoHistorico != null)
-{
-    <div class="enlace">
-        <a href="@minimoHistorico.Enlace" target="_blank">
-            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
-                @{
-                    Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(minimoHistorico.Tienda);
-
-                    if (tienda != null)
-                    {
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
-
-                            <div>
-                                @tienda.Nombre
-                            </div>
+                        <div style="padding: 10px 15px; background-color: var(--descuento);">
+                            @mejorActual.Descuento%
                         </div>
-                    }
-                }
 
-                <span style="flex: 1;"></span>
+                        <div>
+                            @Herramientas.Precios.Euro(mejorActual.Precio)
+                        </div>
 
-                <div style="padding: 10px 15px; background-color: var(--descuento);">
-                    @minimoHistorico.Descuento%
-                </div>
-
-                <div>
-                    @minimoHistorico.Precio€
-                </div>
-
+                    </div>
+                </a>
             </div>
-        </a>
+        }
     </div>
-} *@
+}
 
 <style>
     :root {
     --fondoOscuro: #002033;
-        --fondoBoton: #146a9c;
+    --fondoBoton: #146a9c;
     --fondoBotonPequeño: #0d1621;
     --fondoBotonPequeñoHover: #060a0f;
     --fondoMinimo: #002c47;
@@ -97,58 +110,68 @@
     }
 
     .pepeizq-caja-principal {
-        background-color: var(--fondoOscuro);
-        border: 2px solid var(--fondoBotonPequeño);
-        border-radius: 5px;
-        padding: 5px;
-        color: var(--colorTexto);
-        font-family: 'Motiva Sans', Sans-serif;
-        font-size: 16px;
+    background-color: var(--fondoOscuro);
+    border: 2px solid var(--fondoBotonPequeño);
+    border-radius: 5px;
+    padding: 5px;
+    color: var(--colorTexto);
+    font-family: 'Motiva Sans', Sans-serif;
+    font-size: 16px;
+    margin-bottom: 20px;
+    }
+
+    .pepeizq-abrir-web {
+    transition: transform .2s;
+    }
+
+    .pepeizq-abrir-web:hover {
+    transform: scale(1.01);
     }
 
     .pepeizq-caja-info {
-        background-color: var(--fondoMinimo);
-        border: 2px solid var(--fondoBotonPequeño);
-        border-radius: 5px;
-        padding: 10px 15px;
+    background-color: var(--fondoMinimo);
+    border: 2px solid var(--fondoBotonPequeño);
+    border-radius: 5px;
+    padding: 10px 15px;
     }
 
     .pepeizq-enlace {
-        background-color: var(--fondoBotonPequeño);
-        border: 2px solid var(--fondoBoton);
-        border-radius: 5px;
-        padding: 10px 20px;
-        color: var(--colorTexto);
-        margin-bottom: 20px;
-        
-        
-        transition: transform .2s;
-        }
+    background-color: var(--fondoBotonPequeño);
+    border: 2px solid var(--fondoBoton);
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: var(--colorTexto);
+    transition: transform .2s;
+    margin-top: 5px;
+    }
 
-        .pepeizq-enlace:hover {
-            color: var(--colorTextoHover);
-            transform: scale(1.01);
-            background-color: var(--fondoBotonPequeñoHover);
-        }
+    .pepeizq-enlace:hover {
+    color: var(--colorTextoHover);
+    transform: scale(1.01);
+    background-color: var(--fondoBotonPequeñoHover);
+    }
 </style>
 
 @code {
 
     private string idExtension = string.Empty;
-    private string idioma = string.Empty;
+    private string idiomaUsuario = string.Empty;
+    private string idiomaContenido = string.Empty;
     private string enlace = string.Empty;
     private string idSteam = string.Empty;
     private int idPepeizq = 0;
+
+    private Herramientas.Pepeizqdeals datos = null;
     private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
     private Herramientas.PepeizqdealsPrecio mejorActual = null;
-    private bool esMinimo = false;
 
     protected override async Task OnInitializedAsync()
     {
         idExtension = WebExtensions.I18n.GetMessage("@@extension_id");
-        idioma = CultureInfo.CurrentUICulture.Name;
+        idiomaUsuario = Herramientas.Idiomas.SacarIdiomaUsuarioWeb(CultureInfo.CurrentUICulture.Name);
+        idiomaContenido = await Cliente.GetStringAsync("chrome-extension://" + idExtension + "/idiomas/" + idiomaUsuario + ".json");
         enlace = NavManager.Uri;
-
+        
         if (string.IsNullOrEmpty(enlace) == false)
         {
             if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
@@ -157,11 +180,11 @@
 
                 if (string.IsNullOrEmpty(idSteam) == false)
                 {
-                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/api/steam/" + idSteam);
+                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam);
 
                     if (string.IsNullOrEmpty(html) == false)
                     {
-                        Herramientas.Pepeizqdeals datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
+                        datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
 
                         if (datos != null)
                         {
@@ -176,29 +199,25 @@
                                         if (historico.DRM == 0)
                                         {
                                             minimoHistorico = historico;
-                                            esMinimo = true;
                                         }
                                     }
                                 }
                             }
 
-                            if (minimoHistorico == null)
+                            if (datos.Actuales != null)
                             {
-                                if (datos.Actuales != null)
+                                if (datos.Actuales.Count > 0)
                                 {
-                                    if (datos.Actuales.Count > 0)
-                                    {
-                                        decimal precioMaximo = 1000000;
+                                    decimal precioMaximo = 1000000;
 
-                                        foreach (var actual in datos.Actuales)
+                                    foreach (var actual in datos.Actuales)
+                                    {
+                                        if (actual.DRM == 0 && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
                                         {
-                                            if (actual.DRM == 0 && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
+                                            if (actual.Precio < precioMaximo)
                                             {
-                                                if (actual.Precio < precioMaximo)
-                                                {
-                                                    precioMaximo = actual.Precio;
-                                                    mejorActual = actual;
-                                                }
+                                                precioMaximo = actual.Precio;
+                                                mejorActual = actual;
                                             }
                                         }
                                     }

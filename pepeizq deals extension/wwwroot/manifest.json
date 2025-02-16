@@ -34,7 +34,8 @@
         "app.js",
         "*.png",
         "*.webp",
-        "*.ico"
+        "*.ico",
+        "*.json"
       ],
       "matches": [ "<all_urls>" ]
     }

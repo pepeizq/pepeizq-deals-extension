@@ -4,13 +4,8 @@ namespace Herramientas
 {
 	public static class Calculadora
 	{
-		public static string DiferenciaHaceTiempo(this DateTime? fecha2, string idioma = null)
+		public static string DiferenciaHaceTiempo(this DateTime? fecha2, string json)
 		{
-			if (string.IsNullOrEmpty(idioma) == true)
-			{
-				idioma = "en";
-			}
-
 			DateTime fecha = new DateTime();
 
 			if (fecha2 == null)
@@ -29,33 +24,33 @@ namespace Herramientas
 			{
 				if (diferenciaTiempo.Seconds == 1)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String0"), diferenciaTiempo.Seconds);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String0"), diferenciaTiempo.Seconds);
 				}
 				else
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String1"), diferenciaTiempo.Seconds);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String1"), diferenciaTiempo.Seconds);
 				}
 			}
 			else if (diferenciaTiempo <= TimeSpan.FromMinutes(60))
 			{
 				if (diferenciaTiempo.Minutes == 1)
 				{
-					mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String3");
+					mensaje = Idiomas.BuscarTexto(json, "Calculator.String3");
 				}
 				else if (diferenciaTiempo.Minutes > 1)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String2"), diferenciaTiempo.Minutes);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String2"), diferenciaTiempo.Minutes);
 				}
 			}
 			else if (diferenciaTiempo <= TimeSpan.FromHours(24))
 			{
 				if (diferenciaTiempo.Hours == 1)
 				{
-					mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String5");
+					mensaje = Idiomas.BuscarTexto(json, "Calculator.String5");
 				}
 				else if (diferenciaTiempo.Hours > 1)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String4"), diferenciaTiempo.Hours);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String4"), diferenciaTiempo.Hours);
 				}
 			}
 			else if (diferenciaTiempo < TimeSpan.FromDays(31))
@@ -64,20 +59,20 @@ namespace Herramientas
 				{
 					if (diferenciaTiempo.Hours == 0)
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String17");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String17");
 					}
 					else if (diferenciaTiempo.Hours == 1)
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String16");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String16");
 					}
 					else if (diferenciaTiempo.Hours > 1)
 					{
-						mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String7"), diferenciaTiempo.Hours);
+						mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String7"), diferenciaTiempo.Hours);
 					}
 				}
 				else if (diferenciaTiempo.Days > 1)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String6"), diferenciaTiempo.Days);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String6"), diferenciaTiempo.Days);
 				}
 			}
 			else if (diferenciaTiempo <= TimeSpan.FromDays(365))
@@ -88,20 +83,20 @@ namespace Herramientas
 
 					if (dias > 1)
 					{
-						mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String9"), dias);
+						mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String9"), dias);
 					}
 					else if (dias == 1)
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String14");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String14");
 					}
 					else
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String15");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String15");
 					}
 				}
 				else if (diferenciaTiempo.Days >= 60)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String8"), diferenciaTiempo.Days / 30);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String8"), diferenciaTiempo.Days / 30);
 				}
 			}
 			else
@@ -112,20 +107,20 @@ namespace Herramientas
 
 					if (meses > 1)
 					{
-						mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String11"), meses);
+						mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String11"), meses);
 					}
 					else if (meses == 1)
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String12");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String12");
 					}
 					else
 					{
-						mensaje = Idiomas.BuscarTexto(idioma, "Calculator.String13");
+						mensaje = Idiomas.BuscarTexto(json, "Calculator.String13");
 					}
 				}
 				else if (diferenciaTiempo.Days >= 730)
 				{
-					mensaje = string.Format(Idiomas.BuscarTexto(idioma, "Calculator.String10"), diferenciaTiempo.Days / 365);
+					mensaje = string.Format(Idiomas.BuscarTexto(json, "Calculator.String10"), diferenciaTiempo.Days / 365);
 				}
 			}
 

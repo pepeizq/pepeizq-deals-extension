@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Herramientas
 {
@@ -8,12 +9,6 @@ namespace Herramientas
 		{
 			public string Id { get; set; }
 			public List<string> Codigos { get; set; }
-		}
-
-		public class IdiomaValor
-		{
-			public string Id { get; set; }
-			public string Valor { get; set; }
 		}
 
 		public static List<IdiomaClase> ListadoIdiomasGenerar()
@@ -82,21 +77,19 @@ namespace Herramientas
 			}
 		}
 
-		public static string BuscarTexto(string idiomaUsuario, string cadena)
+		public static string BuscarTexto(string json, string cadena)
 		{
-			idiomaUsuario = SacarIdiomaUsuarioWeb(idiomaUsuario);
-
-			if (idiomaUsuario == "en")
+			if (string.IsNullOrEmpty(json) == false)
 			{
-				return global::Idiomas.Ingles.GenerarListado().Find(x => x.Id == cadena).Valor;
+				JsonElement elementos = JsonSerializer.Deserialize<JsonElement>(json);
+
+				if (elementos.TryGetProperty(cadena, out var resultado))
+				{
+					return resultado.GetString();
+				}
 			}
 
-			if (idiomaUsuario == "es")
-			{
-				return global::Idiomas.Español.GenerarListado().Find(x => x.Id == cadena).Valor;
-			}
-
-			return global::Idiomas.Ingles.GenerarListado().Find(x => x.Id == cadena).Valor;
+			return "empty";
 		}
 	}
 }

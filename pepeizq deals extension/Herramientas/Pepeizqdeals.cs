@@ -9,10 +9,10 @@ namespace Herramientas
 		[JsonPropertyName("id")]
 		public int Id { get; set; }
 
-		[JsonPropertyName("precioMinimosHistoricos")]
+		[JsonPropertyName("minimosHistoricos")]
 		public List<PepeizqdealsPrecio> Historicos { get; set; }
 
-		[JsonPropertyName("precioActualesTiendas")]
+		[JsonPropertyName("precioActuales")]
 		public List<PepeizqdealsPrecio> Actuales { get; set; }
 	}
 
@@ -32,6 +32,9 @@ namespace Herramientas
 
 		[JsonPropertyName("enlace")]
 		public string Enlace { get; set; }
+
+		[JsonPropertyName("fechaDetectado")]
+		public DateTime FechaDetectado { get; set; }
 
 		[JsonPropertyName("fechaActualizacion")]
 		public DateTime FechaActualizacion { get; set; }

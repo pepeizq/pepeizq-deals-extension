@@ -9,6 +9,7 @@
     <Content Remove="wwwroot\app.js~RF1af55c0.TMP" />
     <Content Remove="wwwroot\imagenes\favicon-32x32.png" />
     <Content Remove="wwwroot\imagenes\tiendas\fanatical_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\steam_icono.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,9 +19,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Idiomas\Español.cs~RF2a754ef.TMP" />
-    <None Remove="Idiomas\Español.cs~RF306490a.TMP" />
     <None Remove="wwwroot\app.js~RF1af55c0.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="wwwroot\idiomas\en.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\idiomas\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\idiomas\es.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
