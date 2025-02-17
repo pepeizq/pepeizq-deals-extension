@@ -7,13 +7,13 @@
 @inject NavigationManager NavManager
 @inject HttpClient Cliente
 
+test
+
 @if (idPepeizq > 0)
 {
-    @datos.Actuales.Count
-
     <div class="pepeizq-caja-principal" style="display: flex; flex-direction: column; gap: 5px;">
-        <a href="https://pepeizqdeals.com/game/@idPepeizq" target="_blank">
-            <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px;">
+        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+            <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px;">
                 <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
 
                 @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String1"), "pepeizqdeals.com")
@@ -44,12 +44,45 @@
 
                             if (string.IsNullOrEmpty(mensajeMinimo) == true)
                             {
-                                mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, idiomaContenido), tiendaHistorica) + ")";
+                                mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, idiomaContenido), tiendaHistorica.Nombre) + ")";
                             }
                         }
 
                         @mensajeMinimo
                     </div>     
+                }
+
+                @if (string.IsNullOrEmpty(mensajeBundles) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeBundles
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                @if (string.IsNullOrEmpty(mensajeGratis) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeGratis
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                @if (string.IsNullOrEmpty(mensajeSuscripciones) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeSuscripciones
+                            </div>
+                        </a>
+                    </div>
                 }
             </div>
         </div>
@@ -62,36 +95,49 @@
         }
         else
         {
-            <div class="pepeizq-enlace">
-                <a href="@mejorActual.Enlace" target="_blank">
-                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
-                        @{
-                            Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+                <div style="margin-left: 15px;">
+                    @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String6")
+                </div>
 
-                            if (tienda != null)
-                            {
-                                <div style="display: flex; align-items: center; gap: 15px;">
-                                    <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 24px; max-height: 24px;" />
+                <div class="pepeizq-enlace">
+                    <a href="@Herramientas.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
+                        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+                            @{
+                                Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
 
-                                    <div>
-                                        @tienda.Nombre
+                                if (tienda != null)
+                                {
+                                    <div style="display: flex; align-items: center; gap: 15px;">
+                                        <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 20px; max-height: 20px;" />
+
+                                        <div>
+                                            @tienda.Nombre
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             }
-                        }
 
-                        <span style="flex: 1;"></span>
+                            <span style="flex: 1;"></span>
 
-                        <div style="padding: 10px 15px; background-color: var(--descuento);">
-                            @mejorActual.Descuento%
+                            <div style="padding: 10px 15px; background-color: var(--descuento);">
+                                @mejorActual.Descuento%
+                            </div>
+
+                            <div>
+                                @Herramientas.Precios.Euro(mejorActual.Precio)
+                            </div>
+
                         </div>
+                    </a>
+                </div>
 
-                        <div>
-                            @Herramientas.Precios.Euro(mejorActual.Precio)
-                        </div>
-
+                @if (string.IsNullOrEmpty(mejorActual.CodigoTexto) == false)
+                {
+                    <div style="text-align: right; margin-right: 10px; font-size: 14px;">
+                        @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String7"), mejorActual.CodigoTexto)
                     </div>
-                </a>
+                }
             </div>
         }
     </div>
@@ -106,6 +152,8 @@
     --fondoMinimo: #002c47;
     --colorTexto: #f5f5f5;
     --colorTextoHover: #b9e2fa;
+    --colorEnlace: #95c0fe;
+    --colorEnlaceHover: #3486fd;
     --descuento: #006400;
     }
 
@@ -113,7 +161,7 @@
     background-color: var(--fondoOscuro);
     border: 2px solid var(--fondoBotonPequeño);
     border-radius: 5px;
-    padding: 5px;
+    padding: 5px 10px 10px 10px;
     color: var(--colorTexto);
     font-family: 'Motiva Sans', Sans-serif;
     font-size: 16px;
@@ -121,10 +169,12 @@
     }
 
     .pepeizq-abrir-web {
+    color: var(--colorEnlace);
     transition: transform .2s;
     }
 
     .pepeizq-abrir-web:hover {
+    color: var(--colorEnlaceHover);
     transform: scale(1.01);
     }
 
@@ -137,18 +187,18 @@
 
     .pepeizq-enlace {
     background-color: var(--fondoBotonPequeño);
-    border: 2px solid var(--fondoBoton);
+    border: 2px solid var(--fondoMinimo);
     border-radius: 5px;
     padding: 10px 20px;
     color: var(--colorTexto);
     transition: transform .2s;
-    margin-top: 5px;
     }
 
     .pepeizq-enlace:hover {
     color: var(--colorTextoHover);
     transform: scale(1.01);
     background-color: var(--fondoBotonPequeñoHover);
+    border: 2px solid var(--colorTextoHover);
     }
 </style>
 
@@ -165,13 +215,17 @@
     private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
     private Herramientas.PepeizqdealsPrecio mejorActual = null;
 
+    private string mensajeBundles = null;
+    private string mensajeGratis = null;
+    private string mensajeSuscripciones = null;
+
     protected override async Task OnInitializedAsync()
     {
         idExtension = WebExtensions.I18n.GetMessage("@@extension_id");
         idiomaUsuario = Herramientas.Idiomas.SacarIdiomaUsuarioWeb(CultureInfo.CurrentUICulture.Name);
         idiomaContenido = await Cliente.GetStringAsync("chrome-extension://" + idExtension + "/idiomas/" + idiomaUsuario + ".json");
         enlace = NavManager.Uri;
-        
+
         if (string.IsNullOrEmpty(enlace) == false)
         {
             if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
@@ -214,6 +268,18 @@
                                     {
                                         if (actual.DRM == 0 && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
                                         {
+                                            if (actual.Moneda != 0)
+                                            {
+                                                if (actual.Moneda == 1)
+                                                {
+                                                    actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Dolar);
+                                                }
+                                                else if (actual.Moneda == 2)
+                                                {
+                                                    actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
+                                                }
+                                            }
+
                                             if (actual.Precio < precioMaximo)
                                             {
                                                 precioMaximo = actual.Precio;
@@ -223,12 +289,120 @@
                                     }
                                 }
                             }
+
+                            if (datos.Bundles != null)
+                            {
+                                if (datos.Bundles.Count > 0)
+                                {
+                                    int bundlesDisponibles = 0;
+
+                                    foreach (var bundle in datos.Bundles)
+                                    {
+                                        if (bundle.FechaEmpieza < DateTime.Now && bundle.FechaTermina > DateTime.Now)
+                                        {
+                                            bundlesDisponibles += 1;
+                                        }
+                                    }
+
+                                    if (bundlesDisponibles == 0)
+                                    {
+                                        if (datos.Bundles.Count == 1)
+                                        {
+                                            mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String8");
+                                        }
+                                        else if (datos.Bundles.Count > 1)
+                                        {
+                                            mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String9"), datos.Bundles.Count);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (bundlesDisponibles == 1)
+                                        {
+                                            mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String10");
+                                        }
+                                        else if (bundlesDisponibles > 1)
+                                        {
+                                            mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String11"), bundlesDisponibles);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (datos.Gratis != null)
+                            {
+                                if (datos.Gratis.Count > 0)
+                                {
+                                    int gratisDisponibles = 0;
+
+                                    foreach (var gratis in datos.Gratis)
+                                    {
+                                        if (gratis.FechaEmpieza < DateTime.Now && gratis.FechaTermina > DateTime.Now)
+                                        {
+                                            gratisDisponibles += 1;
+                                        }
+                                    }
+
+                                    if (gratisDisponibles == 0)
+                                    {
+                                        if (datos.Gratis.Count == 1)
+                                        {
+                                            mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String12");
+                                        }
+                                        else if (datos.Gratis.Count > 1)
+                                        {
+                                            mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String13"), datos.Gratis.Count);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String14");
+                                    }
+                                }
+                            }
+
+                            if (datos.Suscripciones != null)
+                            {
+                                if (datos.Suscripciones.Count > 0)
+                                {
+                                    int suscripcionesDisponibles = 0;
+
+                                    foreach (var suscripcion in datos.Suscripciones)
+                                    {
+                                        if (suscripcion.FechaEmpieza < DateTime.Now && suscripcion.FechaTermina > DateTime.Now)
+                                        {
+                                            suscripcionesDisponibles += 1;
+                                        }
+                                    }
+
+                                    if (suscripcionesDisponibles == 0)
+                                    {
+                                        if (datos.Suscripciones.Count == 1)
+                                        {
+                                            mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String15");
+                                        }
+                                        else if (datos.Suscripciones.Count > 1)
+                                        {
+                                            mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String16"), datos.Suscripciones.Count);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (suscripcionesDisponibles == 1)
+                                        {
+                                            mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String17");
+                                        }
+                                        else if (suscripcionesDisponibles > 1)
+                                        {
+                                            mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String18"), suscripcionesDisponibles);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-        
-        
     }
 }

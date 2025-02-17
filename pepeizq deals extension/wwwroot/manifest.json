@@ -20,10 +20,19 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
+  "permissions": [ "activeTab", "declarativeContent" ],
   "content_scripts": [
     {
       "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],
-      "matches": [ "*://*/*" ]
+      "matches": [
+        "https://store.steampowered.com/app/*",
+        "https://store.steampowered.com/dlc/*",
+        "https://www.gog.com/en/game/*"
+      ],
+      "exclude_matches": [
+        "https://www.google.com/*"
+      ],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [

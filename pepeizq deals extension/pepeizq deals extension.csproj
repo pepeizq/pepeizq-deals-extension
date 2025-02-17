@@ -5,11 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\app.js" />
     <Content Remove="wwwroot\app.js~RF1af55c0.TMP" />
     <Content Remove="wwwroot\imagenes\favicon-32x32.png" />
+    <Content Remove="wwwroot\imagenes\tiendas\2game_icono.webp" />
+    <Content Remove="wwwroot\imagenes\tiendas\dlgamer_icono.webp" />
+    <Content Remove="wwwroot\imagenes\tiendas\ea_icono.webp" />
+    <Content Remove="wwwroot\imagenes\tiendas\epic_icono.ico" />
     <Content Remove="wwwroot\imagenes\tiendas\fanatical_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\gamebillet_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\gamersgate_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\gamesplanet_icono.webp" />
+    <Content Remove="wwwroot\imagenes\tiendas\gog_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\greenmangaming_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\humblestore_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\indiegala_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\joybuggy_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\playsum_icono.ico" />
     <Content Remove="wwwroot\imagenes\tiendas\steam_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\ubisoft_icono.webp" />
+    <Content Remove="wwwroot\imagenes\tiendas\voidu_icono.ico" />
+    <Content Remove="wwwroot\imagenes\tiendas\wingamestore_icono.webp" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Pages\10utpkol.s3f~" />
     <None Remove="wwwroot\app.js~RF1af55c0.TMP" />
   </ItemGroup>
 
@@ -27,12 +43,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\app.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\idiomas\en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\idiomas\es.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="wwwroot\app.js" />
   </ItemGroup>
 
 </Project>
