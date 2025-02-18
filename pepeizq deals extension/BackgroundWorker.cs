@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
 using Blazor.BrowserExtension;
+using System.Threading.Tasks;
 
 namespace pepeizq_deals_extension
 {
@@ -13,8 +13,7 @@ namespace pepeizq_deals_extension
 
         async Task OnInstalled()
         {
-			string indexPageUrl = WebExtensions.Runtime.GetURL("index");
-
+            var indexPageUrl = WebExtensions.Runtime.GetURL("index.html");
             await WebExtensions.Tabs.Create(new()
             {
                 Url = indexPageUrl

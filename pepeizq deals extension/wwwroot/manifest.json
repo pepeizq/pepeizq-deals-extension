@@ -1,26 +1,17 @@
-﻿{
+{
   "manifest_version": 3,
   "name": "pepeizq's deals Extension",
-  "description": "My browser extension built with Blazor WebAssembly",
-  "version": "0.1",
-  "background": {
-    "service_worker": "content/BackgroundWorker.js",
-    "type": "module"
-  },
-  "action": {
-    "default_popup": "popup.html"
-  },
-  "host_permissions": [
-    "https://pepeizqdeals.com/*"
-  ],
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
+  "description": "Integrate information taken from pepeizqdeals.com into the Steam games page, you will be able to find out if there is a better deal for a game or if it is in a bundle or a free promotion.",
+  "version": "0.2",
+  "icons": {
+    "16": "iconos/icono16.png",
+    "32": "iconos/icono32.png",
+    "48": "iconos/icono48.png",
+    "128": "iconos/icono128.png"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
-  "permissions": [ "activeTab", "declarativeContent" ],
   "content_scripts": [
     {
       "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],
@@ -28,9 +19,6 @@
         "https://store.steampowered.com/app/*",
         "https://store.steampowered.com/dlc/*",
         "https://www.gog.com/en/game/*"
-      ],
-      "exclude_matches": [
-        "https://www.google.com/*"
       ],
       "run_at": "document_end"
     }
@@ -48,5 +36,10 @@
       ],
       "matches": [ "<all_urls>" ]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "admin@pepeizqdeals.com"
+    }
+  }
 }
