@@ -19,5 +19,15 @@
                 firstMatch.appendChild(appDiv);
             }
         }
+
+        if (window.location.href.indexOf("store.epicgames.com/") > -1 && window.location.href.indexOf("/p/") > -1) {
+            const appDiv = document.createElement("div");
+            appDiv.id = "pepeizqdeals";
+
+            if (document.getElementsByClassName("css-1vedkaf")[0]) {
+                var firstMatch = document.getElementsByClassName("css-1vedkaf")[0];
+                firstMatch.appendChild(appDiv);
+            }
+        }
     }
 }

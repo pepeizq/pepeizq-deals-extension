@@ -9,7 +9,7 @@
 
 @if (idPepeizq > 0)
 {
-    <div class="pepeizq-caja-principal" style="display: flex; flex-direction: column; gap: 5px;">
+    <div class="pepeizq-caja-principal pepeizq-caja-principal-@idDRM.ToString()" style="display: flex; flex-direction: column; gap: 5px;">
         <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
             <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px;">
                 <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
@@ -93,50 +93,72 @@
         }
         else
         {
-            <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
-                <div style="margin-left: 15px;">
-                    @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String6")
-                </div>
+            bool enseñarEnlace = true;
 
-                <div class="pepeizq-enlace">
-                    <a href="@Herramientas.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
-                        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
-                            @{
-                                Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
+            if (idDRM == 0 && mejorActual.Tienda == "steam")
+            {
+                enseñarEnlace = false;
+            }
 
-                                if (tienda != null)
-                                {
-                                    <div style="display: flex; align-items: center; gap: 15px;">
-                                        <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 20px; max-height: 20px;" />
+            if (idDRM == 8 && mejorActual.Tienda == "gog")
+            {
+                enseñarEnlace = false;
+            }
 
-                                        <div>
-                                            @tienda.Nombre
-                                        </div>
-                                    </div>
-                                }
-                            }
+            if (idDRM == 6 && mejorActual.Tienda == "epicgamesstore")
+            {
+                enseñarEnlace = false;
+            }
 
-                            <span style="flex: 1;"></span>
-
-                            <div style="padding: 10px 15px; background-color: var(--descuento);">
-                                @mejorActual.Descuento%
-                            </div>
-
-                            <div>
-                                @Herramientas.Precios.Euro(mejorActual.Precio)
-                            </div>
-
-                        </div>
-                    </a>
-                </div>
-
-                @if (string.IsNullOrEmpty(mejorActual.CodigoTexto) == false)
-                {
-                    <div style="text-align: right; margin-right: 10px; font-size: 14px;">
-                        @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String7"), mejorActual.CodigoTexto)
+            if (enseñarEnlace == true)
+            {
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+                    <div style="margin-left: 15px;">
+                        @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String6")
                     </div>
-                }
-            </div>
+
+                    <div class="pepeizq-enlace">
+                        <a href="@Herramientas.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
+                            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+                                @{
+                                    Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
+
+                                    if (tienda != null)
+                                    {
+                                        <div style="display: flex; align-items: center; gap: 15px;">
+                                            <img src="chrome-extension://@idExtension/@tienda.Icono" style="max-width: 20px; max-height: 20px;" />
+
+                                            @if (idDRM == 0)
+                                            {
+                                                <div>
+                                                    @tienda.Nombre
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+
+                                <span style="flex: 1;"></span>
+
+                                <div style="padding: 10px 15px; background-color: var(--descuento);">
+                                    @mejorActual.Descuento%
+                                </div>
+
+                                <div>
+                                    @Herramientas.Precios.Euro(mejorActual.Precio)
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    @if (string.IsNullOrEmpty(mejorActual.CodigoTexto) == false)
+                    {
+                        <div style="text-align: right; margin-right: 10px; font-size: 14px;">
+                            @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String7"), mejorActual.CodigoTexto)
+                        </div>
+                    }
+                </div>
+            }
         }
     </div>
 }
@@ -161,9 +183,20 @@
     border-radius: 5px;
     padding: 5px 10px 10px 10px;
     color: var(--colorTexto);
+    }
+
+    .pepeizq-caja-principal-0 {
     font-family: 'Motiva Sans', Sans-serif;
-    font-size: 16px;
     margin-bottom: 20px;
+    font-size: 16px;
+    }
+
+    .pepeizq-caja-principal-6 {
+    font-family: 'Inter', Sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     }
 
     .pepeizq-abrir-web {
@@ -206,8 +239,8 @@
     private string idiomaUsuario = string.Empty;
     private string idiomaContenido = string.Empty;
     private string enlace = string.Empty;
-    private string idSteam = string.Empty;
     private int idPepeizq = 0;
+    private int idDRM = 0;
 
     private Herramientas.Pepeizqdeals datos = null;
     private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
@@ -226,174 +259,194 @@
 
         if (string.IsNullOrEmpty(enlace) == false)
         {
+            string html = string.Empty;
+
             if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
             {
-                idSteam = Herramientas.Steam.LimpiarId(enlace);
+                string idSteam = Herramientas.Steam.LimpiarId(enlace);
 
                 if (string.IsNullOrEmpty(idSteam) == false)
                 {
-                    string html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam);
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam);
+                    idDRM = 0;
+                }
+            }
+            else if (enlace.Contains("gog.com") == true && enlace.Contains("/game/") == true)
+            {
 
-                    if (string.IsNullOrEmpty(html) == false)
+            }
+            else if (enlace.Contains("store.epicgames.com/") == true && enlace.Contains("/p/") == true)
+            {
+                string slugEpic = Herramientas.EpicGames.LimpiarSlug(enlace);
+
+                if (string.IsNullOrEmpty(slugEpic) == false)
+                {
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/epic/" + slugEpic);
+                    idDRM = 6;
+                }
+            }
+
+            if (string.IsNullOrEmpty(html) == false)
+            {
+                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
+
+                if (datos != null)
+                {
+                    idPepeizq = datos.Id;
+
+                    if (idPepeizq > 0)
                     {
-                        datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
-
-                        if (datos != null)
+                        if (datos.Historicos != null)
                         {
-                            idPepeizq = datos.Id;
-
-                            if (datos.Historicos != null)
+                            if (datos.Historicos.Count > 0)
                             {
-                                if (datos.Historicos.Count > 0)
+                                foreach (var historico in datos.Historicos)
                                 {
-                                    foreach (var historico in datos.Historicos)
+                                    if (historico.DRM == idDRM)
                                     {
-                                        if (historico.DRM == 0)
-                                        {
-                                            minimoHistorico = historico;
-                                        }
+                                        minimoHistorico = historico;
                                     }
                                 }
                             }
+                        }
 
-                            if (datos.Actuales != null)
+                        if (datos.Actuales != null)
+                        {
+                            if (datos.Actuales.Count > 0)
                             {
-                                if (datos.Actuales.Count > 0)
+                                decimal precioMaximo = 1000000;
+
+                                foreach (var actual in datos.Actuales)
                                 {
-                                    decimal precioMaximo = 1000000;
-
-                                    foreach (var actual in datos.Actuales)
+                                    if (actual.DRM == idDRM && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
                                     {
-                                        if (actual.DRM == 0 && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
+                                        if (actual.Moneda != 0)
                                         {
-                                            if (actual.Moneda != 0)
+                                            if (actual.Moneda == 1)
                                             {
-                                                if (actual.Moneda == 1)
-                                                {
-                                                    actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Dolar);
-                                                }
-                                                else if (actual.Moneda == 2)
-                                                {
-                                                    actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
-                                                }
+                                                actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Dolar);
                                             }
-
-                                            if (actual.Precio < precioMaximo)
+                                            else if (actual.Moneda == 2)
                                             {
-                                                precioMaximo = actual.Precio;
-                                                mejorActual = actual;
+                                                actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
                                             }
                                         }
-                                    }
-                                }
-                            }
 
-                            if (datos.Bundles != null)
-                            {
-                                if (datos.Bundles.Count > 0)
-                                {
-                                    int bundlesDisponibles = 0;
-
-                                    foreach (var bundle in datos.Bundles)
-                                    {
-                                        if (bundle.FechaEmpieza < DateTime.Now && bundle.FechaTermina > DateTime.Now)
+                                        if (actual.Precio < precioMaximo)
                                         {
-                                            bundlesDisponibles += 1;
-                                        }
-                                    }
-
-                                    if (bundlesDisponibles == 0)
-                                    {
-                                        if (datos.Bundles.Count == 1)
-                                        {
-                                            mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String8");
-                                        }
-                                        else if (datos.Bundles.Count > 1)
-                                        {
-                                            mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String9"), datos.Bundles.Count);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (bundlesDisponibles == 1)
-                                        {
-                                            mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String10");
-                                        }
-                                        else if (bundlesDisponibles > 1)
-                                        {
-                                            mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String11"), bundlesDisponibles);
+                                            precioMaximo = actual.Precio;
+                                            mejorActual = actual;
                                         }
                                     }
                                 }
                             }
+                        }
 
-                            if (datos.Gratis != null)
+                        if (datos.Bundles != null)
+                        {
+                            if (datos.Bundles.Count > 0)
                             {
-                                if (datos.Gratis.Count > 0)
+                                int bundlesDisponibles = 0;
+
+                                foreach (var bundle in datos.Bundles)
                                 {
-                                    int gratisDisponibles = 0;
-
-                                    foreach (var gratis in datos.Gratis)
+                                    if (bundle.FechaEmpieza < DateTime.Now && bundle.FechaTermina > DateTime.Now)
                                     {
-                                        if (gratis.FechaEmpieza < DateTime.Now && gratis.FechaTermina > DateTime.Now)
-                                        {
-                                            gratisDisponibles += 1;
-                                        }
+                                        bundlesDisponibles += 1;
                                     }
+                                }
 
-                                    if (gratisDisponibles == 0)
+                                if (bundlesDisponibles == 0)
+                                {
+                                    if (datos.Bundles.Count == 1)
                                     {
-                                        if (datos.Gratis.Count == 1)
-                                        {
-                                            mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String12");
-                                        }
-                                        else if (datos.Gratis.Count > 1)
-                                        {
-                                            mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String13"), datos.Gratis.Count);
-                                        }
+                                        mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String8");
                                     }
-                                    else
+                                    else if (datos.Bundles.Count > 1)
                                     {
-                                        mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String14");
+                                        mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String9"), datos.Bundles.Count);
+                                    }
+                                }
+                                else
+                                {
+                                    if (bundlesDisponibles == 1)
+                                    {
+                                        mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String10");
+                                    }
+                                    else if (bundlesDisponibles > 1)
+                                    {
+                                        mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String11"), bundlesDisponibles);
                                     }
                                 }
                             }
+                        }
 
-                            if (datos.Suscripciones != null)
+                        if (datos.Gratis != null)
+                        {
+                            if (datos.Gratis.Count > 0)
                             {
-                                if (datos.Suscripciones.Count > 0)
+                                int gratisDisponibles = 0;
+
+                                foreach (var gratis in datos.Gratis)
                                 {
-                                    int suscripcionesDisponibles = 0;
-
-                                    foreach (var suscripcion in datos.Suscripciones)
+                                    if (gratis.FechaEmpieza < DateTime.Now && gratis.FechaTermina > DateTime.Now)
                                     {
-                                        if (suscripcion.FechaEmpieza < DateTime.Now && suscripcion.FechaTermina > DateTime.Now)
-                                        {
-                                            suscripcionesDisponibles += 1;
-                                        }
+                                        gratisDisponibles += 1;
                                     }
+                                }
 
-                                    if (suscripcionesDisponibles == 0)
+                                if (gratisDisponibles == 0)
+                                {
+                                    if (datos.Gratis.Count == 1)
                                     {
-                                        if (datos.Suscripciones.Count == 1)
-                                        {
-                                            mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String15");
-                                        }
-                                        else if (datos.Suscripciones.Count > 1)
-                                        {
-                                            mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String16"), datos.Suscripciones.Count);
-                                        }
+                                        mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String12");
                                     }
-                                    else
+                                    else if (datos.Gratis.Count > 1)
                                     {
-                                        if (suscripcionesDisponibles == 1)
-                                        {
-                                            mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String17");
-                                        }
-                                        else if (suscripcionesDisponibles > 1)
-                                        {
-                                            mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String18"), suscripcionesDisponibles);
-                                        }
+                                        mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String13"), datos.Gratis.Count);
+                                    }
+                                }
+                                else
+                                {
+                                    mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String14");
+                                }
+                            }
+                        }
+
+                        if (datos.Suscripciones != null)
+                        {
+                            if (datos.Suscripciones.Count > 0)
+                            {
+                                int suscripcionesDisponibles = 0;
+
+                                foreach (var suscripcion in datos.Suscripciones)
+                                {
+                                    if (suscripcion.FechaEmpieza < DateTime.Now && suscripcion.FechaTermina > DateTime.Now)
+                                    {
+                                        suscripcionesDisponibles += 1;
+                                    }
+                                }
+
+                                if (suscripcionesDisponibles == 0)
+                                {
+                                    if (datos.Suscripciones.Count == 1)
+                                    {
+                                        mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String15");
+                                    }
+                                    else if (datos.Suscripciones.Count > 1)
+                                    {
+                                        mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String16"), datos.Suscripciones.Count);
+                                    }
+                                }
+                                else
+                                {
+                                    if (suscripcionesDisponibles == 1)
+                                    {
+                                        mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String17");
+                                    }
+                                    else if (suscripcionesDisponibles > 1)
+                                    {
+                                        mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String18"), suscripcionesDisponibles);
                                     }
                                 }
                             }

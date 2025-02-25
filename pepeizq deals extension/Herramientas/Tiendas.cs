@@ -119,6 +119,18 @@ namespace Herramientas
 				Id = "voidu",
 				Nombre = "Voidu",
 				Icono = "imagenes/tiendas/voidu_icono.ico"
+			},
+			new Tienda
+			{
+				Id = "gog",
+				Nombre = "GOG",
+				Icono = "imagenes/tiendas/gog_icono.ico"
+			},
+			new Tienda
+			{
+				Id = "epicgamesstore",
+				Nombre = "Epic Games Store",
+				Icono = "imagenes/tiendas/epic_icono.ico"
 			}];
 
 			return tiendas;
