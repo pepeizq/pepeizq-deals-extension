@@ -267,7 +267,7 @@
 
                 if (string.IsNullOrEmpty(idSteam) == false)
                 {
-                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam);
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam + "/" + DatosPersonales.Clave + "/");
                     idDRM = 0;
                 }
             }
@@ -281,7 +281,7 @@
 
                 if (string.IsNullOrEmpty(slugEpic) == false)
                 {
-                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/epic/" + slugEpic);
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/epic/" + slugEpic + "/" + DatosPersonales.Clave + "/");
                     idDRM = 6;
                 }
             }
