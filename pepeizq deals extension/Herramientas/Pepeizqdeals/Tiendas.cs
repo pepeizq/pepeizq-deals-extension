@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Herramientas
+namespace Herramientas.Pepeizqdeals
 {
 	public static class Tiendas
 	{

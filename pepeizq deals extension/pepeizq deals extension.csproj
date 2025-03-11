@@ -5,47 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\app.js~RF1af55c0.TMP" />
-    <Content Remove="wwwroot\favicon.png" />
-    <Content Remove="wwwroot\iconos\icono128.png" />
-    <Content Remove="wwwroot\iconos\icono16.png" />
-    <Content Remove="wwwroot\iconos\icono32.png" />
-    <Content Remove="wwwroot\iconos\icono48.png" />
-    <Content Remove="wwwroot\iconos\logo6.png" />
-    <Content Remove="wwwroot\imagenes\favicon-32x32.png" />
-    <Content Remove="wwwroot\imagenes\tiendas\2game_icono.webp" />
-    <Content Remove="wwwroot\imagenes\tiendas\dlgamer_icono.webp" />
-    <Content Remove="wwwroot\imagenes\tiendas\ea_icono.webp" />
-    <Content Remove="wwwroot\imagenes\tiendas\epic_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\fanatical_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\gamebillet_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\gamersgate_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\gamesplanet_icono.webp" />
-    <Content Remove="wwwroot\imagenes\tiendas\gog_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\greenmangaming_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\humblestore_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\indiegala_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\joybuggy_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\playsum_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\steam_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\ubisoft_icono.webp" />
-    <Content Remove="wwwroot\imagenes\tiendas\voidu_icono.ico" />
-    <Content Remove="wwwroot\imagenes\tiendas\wingamestore_icono.webp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Blazor.BrowserExtension" Version="2.0.2" />
+    <PackageReference Include="Blazor.BrowserExtension" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Pages\10utpkol.s3f~" />
-    <None Remove="wwwroot\app.js~RF1af55c0.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="wwwroot\idiomas\en.json" />
   </ItemGroup>
 
   <ItemGroup>

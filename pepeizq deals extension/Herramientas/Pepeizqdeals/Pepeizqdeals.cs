@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Herramientas
+namespace Herramientas.Pepeizqdeals
 {
-	public class Pepeizqdeals
+	public class Json
 	{
 		[JsonPropertyName("id")]
 		public int Id { get; set; }
@@ -13,19 +13,19 @@ namespace Herramientas
 		public string Nombre { get; set; }
 
 		[JsonPropertyName("minimosHistoricos")]
-		public List<PepeizqdealsPrecio> Historicos { get; set; }
+		public List<JsonPrecio> Historicos { get; set; }
 
 		[JsonPropertyName("preciosActuales")]
-		public List<PepeizqdealsPrecio> Actuales { get; set; }
+		public List<JsonPrecio> Actuales { get; set; }
 
 		[JsonPropertyName("bundles")]
-		public List<PepeizqdealsBundle> Bundles { get; set; }
+		public List<JsonBundle> Bundles { get; set; }
 
 		[JsonPropertyName("gratis")]
-		public List<PepeizqdealsGratis> Gratis { get; set; }
+		public List<JsonGratis> Gratis { get; set; }
 
 		[JsonPropertyName("suscripciones")]
-		public List<PepeizqdealsSuscripcion> Suscripciones { get; set; }
+		public List<JsonSuscripcion> Suscripciones { get; set; }
 
 		[JsonPropertyName("dolar")]
 		public decimal Dolar { get; set; }
@@ -34,7 +34,7 @@ namespace Herramientas
 		public decimal Libra { get; set; }
 	}
 
-	public class PepeizqdealsPrecio
+	public class JsonPrecio
 	{
 		[JsonPropertyName("descuento")]
 		public int Descuento { get; set; }
@@ -67,7 +67,7 @@ namespace Herramientas
 		public string CodigoTexto { get; set; }
 	}
 
-	public class PepeizqdealsBundle
+	public class JsonBundle
 	{
 		[JsonPropertyName("id")]
 		public int Id { get; set; }
@@ -82,7 +82,7 @@ namespace Herramientas
 		public DateTime FechaTermina { get; set; }
 	}
 
-	public class PepeizqdealsGratis
+	public class JsonGratis
 	{
 		[JsonPropertyName("tipo")]
 		public int Tipo { get; set; }
@@ -97,7 +97,7 @@ namespace Herramientas
 		public DateTime FechaTermina { get; set; }
 	}
 
-	public class PepeizqdealsSuscripcion
+	public class JsonSuscripcion
 	{
 		[JsonPropertyName("tipo")]
 		public int Tipo { get; set; }

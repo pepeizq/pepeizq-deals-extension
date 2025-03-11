@@ -22,7 +22,7 @@
             <div style="display: flex; flex-direction: column; gap: 5px;">
                 @if (minimoHistorico != null)
                 {
-                    Herramientas.Tienda tiendaHistorica = Herramientas.Tiendas.Buscar(minimoHistorico.Tienda);
+                    Herramientas.Pepeizqdeals.Tienda tiendaHistorica = Herramientas.Pepeizqdeals.Tiendas.Buscar(minimoHistorico.Tienda);
 
                     <div>
                         @Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String3")
@@ -118,10 +118,10 @@
                     </div>
 
                     <div class="pepeizq-enlace">
-                        <a href="@Herramientas.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
+                        <a href="@Herramientas.Pepeizqdeals.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
                             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
                                 @{
-                                    Herramientas.Tienda tienda = Herramientas.Tiendas.Buscar(mejorActual.Tienda);
+                                    Herramientas.Pepeizqdeals.Tienda tienda = Herramientas.Pepeizqdeals.Tiendas.Buscar(mejorActual.Tienda);
 
                                     if (tienda != null)
                                     {
@@ -199,6 +199,13 @@
     margin-bottom: 10px;
     }
 
+    .pepeizq-caja-principal-8 {
+        font-family: Lato GOG, Lato GOG Latin, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        margin-top: 20px;
+    }
+
     .pepeizq-abrir-web {
     color: var(--colorEnlace);
     transition: transform .2s;
@@ -242,9 +249,9 @@
     private int idPepeizq = 0;
     private int idDRM = 0;
 
-    private Herramientas.Pepeizqdeals datos = null;
-    private Herramientas.PepeizqdealsPrecio minimoHistorico = null;
-    private Herramientas.PepeizqdealsPrecio mejorActual = null;
+    private Herramientas.Pepeizqdeals.Json datos = null;
+    private Herramientas.Pepeizqdeals.JsonPrecio minimoHistorico = null;
+    private Herramientas.Pepeizqdeals.JsonPrecio mejorActual = null;
 
     private string mensajeBundles = null;
     private string mensajeGratis = null;
@@ -273,7 +280,13 @@
             }
             else if (enlace.Contains("gog.com") == true && enlace.Contains("/game/") == true)
             {
+                string slugGog = Herramientas.Gog.LimpiarSlug(enlace);
 
+                if (string.IsNullOrEmpty(slugGog) == false)
+                {
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/gog/" + slugGog + "/" + DatosPersonales.Clave + "/");
+                    idDRM = 8;
+                }
             }
             else if (enlace.Contains("store.epicgames.com/") == true && enlace.Contains("/p/") == true)
             {
@@ -288,7 +301,7 @@
 
             if (string.IsNullOrEmpty(html) == false)
             {
-                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals>(html);
+                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals.Json>(html);
 
                 if (datos != null)
                 {
@@ -399,7 +412,7 @@
                                 {
                                     if (datos.Gratis.Count == 1)
                                     {
-                                        mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String12");
+                                        mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String12"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
                                     }
                                     else if (datos.Gratis.Count > 1)
                                     {
@@ -408,7 +421,14 @@
                                 }
                                 else
                                 {
-                                    mensajeGratis = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String14");
+                                    if (gratisDisponibles == 1)
+                                    {
+                                        mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String14"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
+                                    }
+                                    else if (gratisDisponibles > 1)
+                                    {
+                                        mensajeGratis = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String19"), gratisDisponibles);
+                                    }
                                 }
                             }
                         }
@@ -431,7 +451,7 @@
                                 {
                                     if (datos.Suscripciones.Count == 1)
                                     {
-                                        mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String15");
+                                        mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String15"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
                                     }
                                     else if (datos.Suscripciones.Count > 1)
                                     {
@@ -442,7 +462,7 @@
                                 {
                                     if (suscripcionesDisponibles == 1)
                                     {
-                                        mensajeSuscripciones = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String17");
+                                        mensajeSuscripciones = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String17"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
                                     }
                                     else if (suscripcionesDisponibles > 1)
                                     {

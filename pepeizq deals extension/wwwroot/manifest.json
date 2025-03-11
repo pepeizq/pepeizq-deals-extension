@@ -2,7 +2,9 @@
   "manifest_version": 3,
   "name": "pepeizq's deals Extension",
   "description": "Integrate pepeizqdeals.com into the Steam games page, you will be able to find out if there is a better deal for a game.",
-  "version": "0.4",
+  "version": "0.5",
+  "author": "pepeizq",
+  "homepage_url": "https://github.com/pepeizq/pepeizq-deals-extension",
   "icons": {
     "16": "iconos/icono16.png",
     "32": "iconos/icono32.png",
@@ -11,6 +13,10 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": {
+    "scripts": [ "content/BackgroundWorker.js" ],
+    "type": "module"
   },
   "content_scripts": [
     {
