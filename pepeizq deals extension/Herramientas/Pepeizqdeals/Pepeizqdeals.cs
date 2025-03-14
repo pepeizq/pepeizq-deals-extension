@@ -27,6 +27,18 @@ namespace Herramientas.Pepeizqdeals
 		[JsonPropertyName("suscripciones")]
 		public List<JsonSuscripcion> Suscripciones { get; set; }
 
+		[JsonPropertyName("idSteam")]
+		public int IdSteam { get; set; }
+
+		[JsonPropertyName("idGOG")]
+		public int IdGog { get; set; }
+
+		[JsonPropertyName("slugGOG")]
+		public string SlugGog { get; set; }
+
+		[JsonPropertyName("slugEpic")]
+		public string SlugEpic { get; set; }
+
 		[JsonPropertyName("dolar")]
 		public decimal Dolar { get; set; }
 
@@ -69,6 +81,9 @@ namespace Herramientas.Pepeizqdeals
 
 	public class JsonBundle
 	{
+		[JsonPropertyName("tipo")]
+		public int Tipo { get; set; }
+
 		[JsonPropertyName("id")]
 		public int Id { get; set; }
 

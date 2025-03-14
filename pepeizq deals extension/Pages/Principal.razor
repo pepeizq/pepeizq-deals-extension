@@ -10,13 +10,52 @@
 @if (idPepeizq > 0)
 {
     <div class="pepeizq-caja-principal pepeizq-caja-principal-@idDRM.ToString()" style="display: flex; flex-direction: column; gap: 5px;">
-        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
-            <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
+        <div style="display: flex; align-items: center; gap: 10px; justify-content: space-between;">
+            <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                    <img src="chrome-extension://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
 
-                @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String1"), "pepeizqdeals.com")
-            </div>
-        </a>
+                    <div style="width: 100%;">
+                        @string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String1"), "pepeizqdeals.com")
+                    </div>
+                </div>
+            </a>
+
+            @if (idDRM != 0 || idDRM != 8 || idDRM != 6)
+            {
+                <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+                    @if (idDRM != 0)
+                    {
+                        if (datos.IdSteam > 0)
+                        {
+                            <a href="https://store.steampowered.com/app/@datos.IdSteam" target="_blank">
+                                <img src="chrome-extension://@idExtension/imagenes/tiendas/steam_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+
+                    @if (idDRM != 8)
+                    {
+                        if (string.IsNullOrEmpty(datos.SlugGog) == false)
+                        {
+                            <a href="https://www.gog.com/game/@datos.SlugGog" target="_blank">
+                                <img src="chrome-extension://@idExtension/imagenes/tiendas/gog_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+
+                    @if (idDRM != 6)
+                    {
+                        if (string.IsNullOrEmpty(datos.SlugEpic) == false)
+                        {
+                            <a href="https://store.epicgames.com/p/@datos.SlugEpic" target="_blank">
+                                <img src="chrome-extension://@idExtension/imagenes/tiendas/epic_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+                </div>
+            }
+        </div>
 
         <div class="pepeizq-caja-info">
             <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -53,7 +92,7 @@
                 @if (string.IsNullOrEmpty(mensajeBundles) == false)
                 {
                     <div style="margin-top: 5px;">
-                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#bundles" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeBundles
                             </div>
@@ -64,7 +103,7 @@
                 @if (string.IsNullOrEmpty(mensajeGratis) == false)
                 {
                     <div style="margin-top: 5px;">
-                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#gratis" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeGratis
                             </div>
@@ -75,7 +114,7 @@
                 @if (string.IsNullOrEmpty(mensajeSuscripciones) == false)
                 {
                     <div style="margin-top: 5px;">
-                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                        <a href="https://pepeizqdeals.com/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#suscripciones" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeSuscripciones
                             </div>
@@ -200,10 +239,10 @@
     }
 
     .pepeizq-caja-principal-8 {
-        font-family: Lato GOG, Lato GOG Latin, sans-serif;
-        font-size: 15px;
-        line-height: 22px;
-        margin-top: 20px;
+    font-family: Lato GOG, Lato GOG Latin, sans-serif;
+    font-size: 15px;
+    line-height: 22px;
+    margin-top: 20px;
     }
 
     .pepeizq-abrir-web {
@@ -274,7 +313,7 @@
 
                 if (string.IsNullOrEmpty(idSteam) == false)
                 {
-                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam/" + idSteam + "/" + DatosPersonales.Clave + "/");
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/steam2/" + idSteam + "/" + DatosPersonales.Clave + "/");
                     idDRM = 0;
                 }
             }
@@ -284,7 +323,7 @@
 
                 if (string.IsNullOrEmpty(slugGog) == false)
                 {
-                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/gog/" + slugGog + "/" + DatosPersonales.Clave + "/");
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/gog2/" + slugGog + "/" + DatosPersonales.Clave + "/");
                     idDRM = 8;
                 }
             }
@@ -294,7 +333,7 @@
 
                 if (string.IsNullOrEmpty(slugEpic) == false)
                 {
-                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/epic/" + slugEpic + "/" + DatosPersonales.Clave + "/");
+                    html = await Herramientas.Decompiladores.Estandar("https://pepeizqdeals.com/extension/epic2/" + slugEpic + "/" + DatosPersonales.Clave + "/");
                     idDRM = 6;
                 }
             }
@@ -373,7 +412,7 @@
                                 {
                                     if (datos.Bundles.Count == 1)
                                     {
-                                        mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String8");
+                                        mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String8"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
                                     }
                                     else if (datos.Bundles.Count > 1)
                                     {
@@ -384,7 +423,7 @@
                                 {
                                     if (bundlesDisponibles == 1)
                                     {
-                                        mensajeBundles = Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String10");
+                                        mensajeBundles = string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String10"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
                                     }
                                     else if (bundlesDisponibles > 1)
                                     {

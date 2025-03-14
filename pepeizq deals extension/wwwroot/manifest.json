@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "pepeizq's deals Extension",
-  "description": "Integrate pepeizqdeals.com into the Steam games page, you will be able to find out if there is a better deal for a game.",
-  "version": "0.5",
+  "name": "__MSG_name__",
+  "description": "__MSG_description__",
+  "version": "0.7",
   "author": "pepeizq",
   "homepage_url": "https://github.com/pepeizq/pepeizq-deals-extension",
   "icons": {
@@ -11,13 +11,15 @@
     "48": "iconos/icono48.png",
     "128": "iconos/icono128.png"
   },
+  "default_locale": "en",
+  "default_title": "__MSG_name__",
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
-  "background": {
-    "scripts": [ "content/BackgroundWorker.js" ],
-    "type": "module"
-  },
+  "permissions": [
+    "scripting",
+    "activeTab"
+  ],
   "content_scripts": [
     {
       "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],
@@ -27,7 +29,8 @@
         "https://www.gog.com/*/game/*",
         "https://store.epicgames.com/*/p/*"
       ],
-      "run_at": "document_idle"
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ],
   "web_accessible_resources": [
