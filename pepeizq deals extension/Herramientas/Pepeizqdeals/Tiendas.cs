@@ -131,6 +131,12 @@ namespace Herramientas.Pepeizqdeals
 				Id = "epicgamesstore",
 				Nombre = "Epic Games Store",
 				Icono = "imagenes/tiendas/epic_icono.ico"
+			},
+			new Tienda
+			{
+				Id = "planetplay",
+				Nombre = "PlanetPlay",
+				Icono = "imagenes/tiendas/planetplay_icono.webp"
 			}];
 
 			return tiendas;
