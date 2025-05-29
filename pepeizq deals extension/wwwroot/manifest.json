@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_name__",
   "description": "__MSG_description__",
-  "version": "0.7",
+  "version": "0.8",
   "author": "pepeizq",
   "homepage_url": "https://github.com/pepeizq/pepeizq-deals-extension",
   "icons": {
@@ -12,7 +12,6 @@
     "128": "iconos/icono128.png"
   },
   "default_locale": "en",
-  "default_title": "__MSG_name__",
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },

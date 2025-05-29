@@ -3,6 +3,7 @@
 
 @using System.Text.Json
 @using System.Globalization
+@using System.Text.Json.Serialization
 
 @inject NavigationManager NavManager
 @inject HttpClient Cliente
@@ -204,78 +205,79 @@
 
 <style>
     :root {
-    --fondoOscuro: #002033;
-    --fondoBoton: #146a9c;
-    --fondoBotonPequeño: #0d1621;
-    --fondoBotonPequeñoHover: #060a0f;
-    --fondoMinimo: #002c47;
-    --colorTexto: #f5f5f5;
-    --colorTextoHover: #b9e2fa;
-    --colorEnlace: #95c0fe;
-    --colorEnlaceHover: #3486fd;
-    --descuento: #006400;
+        --fondoOscuro: #002033;
+        --fondoBoton: #146a9c;
+        --fondoBotonPequeño: #0d1621;
+        --fondoBotonPequeñoHover: #060a0f;
+        --fondoMinimo: #002c47;
+        --colorTexto: #f5f5f5;
+        --colorTextoHover: #b9e2fa;
+        --colorEnlace: #95c0fe;
+        --colorEnlaceHover: #3486fd;
+        --descuento: #006400;
     }
 
     .pepeizq-caja-principal {
-    background-color: var(--fondoOscuro);
-    border: 2px solid var(--fondoBotonPequeño);
-    border-radius: 5px;
-    padding: 5px 10px 10px 10px;
-    color: var(--colorTexto);
+        padding: 5px 10px 10px 10px;
+        color: var(--colorTexto);
+        background: linear-gradient(180deg, var(--fondoOscuro) 0%, var(--fondoMinimo) 211.07%);
+        border: 2px solid var(--fondoOscuro);
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
+        border-radius: 5px;
     }
 
     .pepeizq-caja-principal-0 {
-    font-family: 'Motiva Sans', Sans-serif;
-    margin-bottom: 20px;
-    font-size: 16px;
+        font-family: 'Motiva Sans', Sans-serif;
+        margin-bottom: 20px;
+        font-size: 16px;
     }
 
     .pepeizq-caja-principal-6 {
-    font-family: 'Inter', Sans-serif;
-    font-size: 14px;
-    line-height: 22px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+        font-family: 'Inter', Sans-serif;
+        font-size: 14px;
+        line-height: 22px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .pepeizq-caja-principal-8 {
-    font-family: Lato GOG, Lato GOG Latin, sans-serif;
-    font-size: 15px;
-    line-height: 22px;
-    margin-top: 20px;
+        font-family: Lato GOG, Lato GOG Latin, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        margin-top: 20px;
     }
 
     .pepeizq-abrir-web {
-    color: var(--colorEnlace);
-    transition: transform .2s;
+        color: var(--colorEnlace);
+        transition: transform .2s;
     }
 
     .pepeizq-abrir-web:hover {
-    color: var(--colorEnlaceHover);
-    transform: scale(1.01);
+        color: var(--colorEnlaceHover);
+        transform: scale(1.01);
     }
 
     .pepeizq-caja-info {
-    background-color: var(--fondoMinimo);
-    border: 2px solid var(--fondoBotonPequeño);
-    border-radius: 5px;
-    padding: 10px 15px;
+        background-color: var(--fondoMinimo);
+        border: 1px solid var(--fondoBotonPequeño);
+        border-radius: 5px;
+        padding: 10px 15px;
     }
 
     .pepeizq-enlace {
-    background-color: var(--fondoBotonPequeño);
-    border: 2px solid var(--fondoMinimo);
-    border-radius: 5px;
-    padding: 10px 20px;
-    color: var(--colorTexto);
-    transition: transform .2s;
+        background-color: var(--fondoBotonPequeño);
+        border: 2px solid var(--fondoMinimo);
+        border-radius: 5px;
+        padding: 10px 20px;
+        color: var(--colorTexto);
+        transition: transform .2s;
     }
 
     .pepeizq-enlace:hover {
-    color: var(--colorTextoHover);
-    transform: scale(1.01);
-    background-color: var(--fondoBotonPequeñoHover);
-    border: 2px solid var(--colorTextoHover);
+        color: var(--colorTextoHover);
+        transform: scale(1.01);
+        background-color: var(--fondoBotonPequeñoHover);
+        border: 2px solid var(--colorTextoHover);
     }
 </style>
 
@@ -340,7 +342,13 @@
 
             if (string.IsNullOrEmpty(html) == false)
             {
-                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals.Json>(html);
+                JsonSerializerOptions opciones = new JsonSerializerOptions()
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    PropertyNameCaseInsensitive = true
+                };
+
+                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals.Json>(html, opciones);
 
                 if (datos != null)
                 {
