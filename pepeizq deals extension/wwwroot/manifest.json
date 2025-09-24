@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_name__",
   "description": "__MSG_description__",
-  "version": "0.8",
+  "version": "0.9",
   "author": "pepeizq",
   "homepage_url": "https://github.com/pepeizq/pepeizq-deals-extension",
   "icons": {
@@ -15,10 +15,6 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
-  "permissions": [
-    "scripting",
-    "activeTab"
-  ],
   "content_scripts": [
     {
       "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],

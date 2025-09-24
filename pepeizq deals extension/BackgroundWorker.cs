@@ -14,6 +14,7 @@ namespace pepeizq_deals_extension
         async Task OnInstalled()
         {
             var indexPageUrl = WebExtensions.Runtime.GetURL("index.html");
+
             await WebExtensions.Tabs.Create(new()
             {
                 Url = indexPageUrl

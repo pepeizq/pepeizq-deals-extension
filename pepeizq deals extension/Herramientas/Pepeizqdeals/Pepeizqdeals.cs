@@ -54,6 +54,9 @@ namespace Herramientas.Pepeizqdeals
 		[JsonPropertyName("precio")]
 		public decimal Precio { get; set; }
 
+		[JsonPropertyName("precioCambiado")]
+		public decimal PrecioCambiado { get; set; }
+
 		[JsonPropertyName("drm")]
 		public int DRM { get; set; }
 

@@ -1,4 +1,4 @@
-﻿@page "/principal.html"
+﻿@page "/caja.html"
 @inherits BasePage
 
 @using System.Text.Json
@@ -74,6 +74,11 @@
 
                             if (mejorActual != null)
                             {
+                                if (mejorActual.Moneda == 0 && minimoHistorico.Moneda == 0)
+                                {
+                                    
+                                }
+
                                 if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
                                 {
                                     mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(Herramientas.Idiomas.BuscarTexto(idiomaContenido, "String5"), tiendaHistorica.Nombre) + ")";
@@ -185,7 +190,14 @@
                                 </div>
 
                                 <div>
-                                    @Herramientas.Precios.Euro(mejorActual.Precio)
+                                    @if (mejorActual.PrecioCambiado > 0)
+                                    {
+                                        @Herramientas.Precios.Euro(mejorActual.PrecioCambiado)
+                                    }
+                                    else
+                                    {
+                                        @Herramientas.Precios.Euro(mejorActual.Precio)
+                                    }
                                 </div>
                             </div>
                         </a>
@@ -365,6 +377,11 @@
                                     if (historico.DRM == idDRM)
                                     {
                                         minimoHistorico = historico;
+
+                                        if (minimoHistorico.PrecioCambiado > 0)
+                                        {
+                                            minimoHistorico.Precio = minimoHistorico.PrecioCambiado;
+                                        }
                                     }
                                 }
                             }
@@ -380,7 +397,7 @@
                                 {
                                     if (actual.DRM == idDRM && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
                                     {
-                                        if (actual.Moneda != 0)
+                                        if (actual.Moneda != 0 && actual.PrecioCambiado == 0)
                                         {
                                             if (actual.Moneda == 1)
                                             {
@@ -390,6 +407,10 @@
                                             {
                                                 actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
                                             }
+                                        }
+                                        else if (actual.Moneda != 0 && actual.PrecioCambiado > 0)
+                                        {
+                                            actual.Precio = actual.PrecioCambiado;
                                         }
 
                                         if (actual.Precio < precioMaximo)

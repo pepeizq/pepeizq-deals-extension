@@ -5,7 +5,7 @@ using Blazor.BrowserExtension;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using pepeizq_deals_extension.Pages;
+using pepeizq_deals_extension.Paginas;
 
 namespace pepeizq_deals_extension
 {
@@ -19,13 +19,13 @@ namespace pepeizq_deals_extension
             {
 				if (browserExtension.Mode == BrowserExtensionMode.ContentScript)
 				{
-					builder.RootComponents.Add<Principal>("#pepeizqdeals");
+					builder.RootComponents.Add<Caja>("#pepeizqdeals");
 				}
 				else
                 {
                     builder.RootComponents.Add<App>("#app");
                     builder.RootComponents.Add<HeadOutlet>("head::after");
-                }
+				}
             });
 
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
