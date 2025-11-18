@@ -1,0 +1,567 @@
+﻿@page "/caja.html"
+@inherits BasePage
+
+@using System.Globalization
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+@inject NavigationManager NavManager
+
+@if (idPepeizq > 0)
+{
+    <div class="pepeizq-caja-principal pepeizq-caja-principal-@idDRM.ToString()" style="display: flex; flex-direction: column; gap: 5px;">      
+        <div style="display: flex; align-items: center; gap: 10px; justify-content: space-between;">
+            <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/" target="_blank">
+                <div class="pepeizq-abrir-web" style="padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                    <img src="@navegadorFicheros://@idExtension/imagenes/logos/favicon-32x32.png" style="max-width: 20px; max-height: 20px;" />
+
+                    <div style="width: 100%;">
+                        @string.Format(WebExtensions.I18n.GetMessage("String1"), "pepe.deals")
+                    </div>
+                </div>
+            </a>
+
+            @if (idDRM != 0 || idDRM != 8 || idDRM != 6)
+            {
+                <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+                    @if (idDRM != 0)
+                    {
+                        if (datos.IdSteam > 0)
+                        {
+                            <a href="https://store.steampowered.com/app/@datos.IdSteam" target="_blank">
+                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/steam_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+
+                    @if (idDRM != 8)
+                    {
+                        if (string.IsNullOrEmpty(datos.SlugGog) == false)
+                        {
+                            <a href="https://www.gog.com/game/@datos.SlugGog" target="_blank">
+                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/gog_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+
+                    @if (idDRM != 6)
+                    {
+                        if (string.IsNullOrEmpty(datos.SlugEpic) == false)
+                        {
+                            <a href="https://store.epicgames.com/p/@datos.SlugEpic" target="_blank">
+                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/epic_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                            </a>
+                        }
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="pepeizq-caja-info">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                @if (minimoHistorico != null)
+                {
+                    Herramientas.Pepeizqdeals.Tienda tiendaHistorica = Herramientas.Pepeizqdeals.Tiendas.Buscar(minimoHistorico.Tienda);
+
+                    <div>
+                        @WebExtensions.I18n.GetMessage("String3")
+                    </div>
+
+                    <div>
+                        @{
+                            string mensajeMinimo = string.Empty;
+
+                            if (mejorActual != null)
+                            {
+                                if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
+                                {
+                                    mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(WebExtensions.I18n.GetMessage("String5"), tiendaHistorica.Nombre) + ")";
+                                }
+                            }
+
+                            if (string.IsNullOrEmpty(mensajeMinimo) == true)
+                            {
+                                mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(WebExtensions.I18n.GetMessage("String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, WebExtensions.I18n), tiendaHistorica.Nombre) + ")";
+                            }
+                        }
+
+                        @mensajeMinimo
+                    </div>     
+                }
+
+                @if (string.IsNullOrEmpty(mensajeBundles) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#bundles" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeBundles
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                @if (string.IsNullOrEmpty(mensajeGratis) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#gratis" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeGratis
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                @if (string.IsNullOrEmpty(mensajeSuscripciones) == false)
+                {
+                    <div style="margin-top: 5px;">
+                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#suscripciones" target="_blank">
+                            <div class="pepeizq-abrir-web">
+                                @mensajeSuscripciones
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (mejorActual == null)
+        {
+            <div style="padding: 10px 15px;">
+                @WebExtensions.I18n.GetMessage("String2")
+            </div>
+        }
+        else
+        {
+            bool enseñarEnlace = true;
+
+            if (idDRM == 0 && mejorActual.Tienda == "steam")
+            {
+                enseñarEnlace = false;
+            }
+
+            if (idDRM == 8 && mejorActual.Tienda == "gog")
+            {
+                enseñarEnlace = false;
+            }
+
+            if (idDRM == 6 && mejorActual.Tienda == "epicgamesstore")
+            {
+                enseñarEnlace = false;
+            }
+
+            if (enseñarEnlace == true)
+            {
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 10px;">
+                    <div style="margin-left: 15px;">
+                        @WebExtensions.I18n.GetMessage("String6")
+                    </div>
+
+                    <div class="pepeizq-enlace">
+                        <a href="@Herramientas.Pepeizqdeals.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
+                            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+                                @{
+                                    Herramientas.Pepeizqdeals.Tienda tienda = Herramientas.Pepeizqdeals.Tiendas.Buscar(mejorActual.Tienda);
+
+                                    if (tienda != null)
+                                    {
+                                        <div style="display: flex; align-items: center; gap: 15px;">
+                                            <img src="@navegadorFicheros://@idExtension/@tienda.Icono" style="max-width: 20px; max-height: 20px;" />
+
+                                            @if (idDRM == 0)
+                                            {
+                                                <div>
+                                                    @tienda.Nombre
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+
+                                <span style="flex: 1;"></span>
+
+                                <div style="padding: 10px 15px; background-color: var(--descuento);">
+                                    @mejorActual.Descuento%
+                                </div>
+
+                                <div>
+                                    @if (mejorActual.PrecioCambiado > 0)
+                                    {
+                                        @Herramientas.Precios.Euro(mejorActual.PrecioCambiado)
+                                    }
+                                    else
+                                    {
+                                        @Herramientas.Precios.Euro(mejorActual.Precio)
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    @if (string.IsNullOrEmpty(mejorActual.CodigoTexto) == false)
+                    {
+                        <div style="text-align: right; margin-right: 10px; font-size: 14px;">
+                            @string.Format(WebExtensions.I18n.GetMessage("String7"), mejorActual.CodigoTexto)
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
+
+<style>
+    :root {
+        --fondoSubsubcabecera: #293751;
+        --fondoSubcabecera: #222b44;
+        --fondoBoton: #146a9c;
+        --fondoBotonPequeño: #0d1621;
+        --fondoBotonPequeñoHover: #060a0f;
+        --fondoMinimo: #002c47;
+        --colorTexto: #f5f5f5;
+        --colorTextoHover: #b9e2fa;
+        --colorEnlace: #95c0fe;
+        --colorEnlaceHover: #3486fd;
+        --descuento: #006400;
+    }
+
+    .pepeizq-caja-principal {
+        padding: 5px 10px 10px 10px;
+        color: var(--colorTexto);
+        background: linear-gradient(180deg, var(--fondoSubsubcabecera) 0%, var(--fondoSubcabecera) 211.07%);
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
+    }
+
+    .pepeizq-caja-principal-0 {
+        font-family: 'Motiva Sans', Sans-serif;
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
+
+    .pepeizq-caja-principal-6 {
+        font-family: 'Inter', Sans-serif;
+        font-size: 14px;
+        line-height: 22px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .pepeizq-caja-principal-8 {
+        font-family: Lato GOG, Lato GOG Latin, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        margin-top: 20px;
+    }
+
+    .pepeizq-abrir-web {
+        color: var(--colorEnlace);
+        transition: transform .2s;
+    }
+
+    .pepeizq-abrir-web:hover {
+        color: var(--colorEnlaceHover);
+        transform: scale(1.01);
+    }
+
+    .pepeizq-caja-info {
+        background: color-mix(in srgb, var(--fondoSubsubcabecera) 65%, var(--fondoBotonPequeño));
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5),0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+        padding: 10px 15px;
+    }
+
+    .pepeizq-enlace {
+        background-color: var(--fondoBotonPequeño);
+        border: 2px solid var(--fondoBotonPequeño);
+        padding: 10px 20px;
+        color: var(--colorTexto);
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
+        transition: transform .2s;
+    }
+
+    .pepeizq-enlace:hover {
+        color: var(--colorTextoHover);
+        transform: scale(1.01);
+        background-color: var(--fondoBotonPequeñoHover);
+        border: 2px solid var(--colorTextoHover);
+    }
+</style>
+
+@code {
+
+    private string navegadorFicheros = string.Empty;
+
+    private string idExtension = string.Empty;
+    private string enlace = string.Empty;
+    private int idPepeizq = 0;
+    private int idDRM = 0;
+
+    private Herramientas.Pepeizqdeals.Json datos = null;
+    private Herramientas.Pepeizqdeals.JsonPrecio minimoHistorico = null;
+    private Herramientas.Pepeizqdeals.JsonPrecio mejorActual = null;
+
+    private string mensajeBundles = null;
+    private string mensajeGratis = null;
+    private string mensajeSuscripciones = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DatosPersonales.NavegadorUsado == Navegador.Firefox)
+        {
+            navegadorFicheros = "moz-extension";
+        }
+        else
+        {
+            navegadorFicheros = "chrome-extension";
+        }
+
+        idExtension = WebExtensions.I18n.GetMessage("@@extension_id");
+        enlace = NavManager.Uri;
+
+        if (string.IsNullOrEmpty(enlace) == false)
+        {
+            string html = string.Empty;
+
+            if (enlace.Contains("store.steampowered.com/app/") == true || enlace.Contains("store.steampowered.com/dlc/") == true)
+            {
+                string idSteam = Herramientas.Steam.LimpiarId(enlace);
+
+                if (string.IsNullOrEmpty(idSteam) == false)
+                {
+                    string enlace = "https://pepe.deals/extension/steam2/" + idSteam + "/" + DatosPersonales.Clave + "/";
+
+                    OyenteMensaje mensaje = new OyenteMensaje()
+                    {
+                        action = "ObtenerHtml",
+                        enlace = enlace
+                    };
+
+                    var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
+                    html = JsonSerializer.Serialize(respuesta);
+
+                    idDRM = 0;
+                }
+            }
+            else if (enlace.Contains("gog.com") == true && enlace.Contains("/game/") == true)
+            {
+                string slugGog = Herramientas.Gog.LimpiarSlug(enlace);
+
+                if (string.IsNullOrEmpty(slugGog) == false)
+                {
+                    string enlace = "https://pepe.deals/extension/gog2/" + slugGog + "/" + DatosPersonales.Clave + "/";
+
+                    OyenteMensaje mensaje = new OyenteMensaje()
+                    {
+                        action = "ObtenerHtml",
+                        enlace = enlace
+                    };
+
+                    var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
+                    html = JsonSerializer.Serialize(respuesta);
+
+                    idDRM = 8;
+                }
+            }
+            else if (enlace.Contains("store.epicgames.com/") == true && enlace.Contains("/p/") == true)
+            {
+                string slugEpic = Herramientas.EpicGames.LimpiarSlug(enlace);
+
+                if (string.IsNullOrEmpty(slugEpic) == false)
+                {
+                    string enlace = "https://pepe.deals/extension/epic2/" + slugEpic + "/" + DatosPersonales.Clave + "/";
+
+                    OyenteMensaje mensaje = new OyenteMensaje()
+                    {
+                        action = "ObtenerHtml",
+                        enlace = enlace
+                    };
+
+                    var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
+                    html = JsonSerializer.Serialize(respuesta);
+
+                    idDRM = 6;
+                }
+            }
+
+            if (string.IsNullOrEmpty(html) == false)
+            {
+                JsonSerializerOptions opciones = new JsonSerializerOptions()
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    PropertyNameCaseInsensitive = true
+                };
+
+                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals.Json>(html, opciones);
+
+                if (datos != null)
+                {
+                    idPepeizq = datos.Id;
+
+                    if (idPepeizq > 0)
+                    {
+                        if (datos.Historicos?.Count > 0)
+                        {
+                            foreach (var historico in datos.Historicos)
+                            {
+                                if (historico.DRM == idDRM)
+                                {
+                                    minimoHistorico = historico;
+
+                                    if (minimoHistorico.PrecioCambiado > 0)
+                                    {
+                                        minimoHistorico.Precio = minimoHistorico.PrecioCambiado;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (datos.Actuales?.Count > 0)
+                        {
+                            decimal precioMaximo = 1000000;
+
+                            foreach (var actual in datos.Actuales)
+                            {
+                                if (actual.DRM == idDRM && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
+                                {
+                                    if (actual.Moneda != 0 && actual.PrecioCambiado == 0)
+                                    {
+                                        if (actual.Moneda == 1)
+                                        {
+                                            actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Dolar);
+                                        }
+                                        else if (actual.Moneda == 2)
+                                        {
+                                            actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
+                                        }
+                                    }
+                                    else if (actual.Moneda != 0 && actual.PrecioCambiado > 0)
+                                    {
+                                        actual.Precio = actual.PrecioCambiado;
+                                    }
+
+                                    if (actual.Precio < precioMaximo)
+                                    {
+                                        precioMaximo = actual.Precio;
+                                        mejorActual = actual;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (datos.Bundles?.Count > 0)
+                        {
+                            int bundlesDisponibles = 0;
+
+                            foreach (var bundle in datos.Bundles)
+                            {
+                                if (bundle.FechaEmpieza < DateTime.Now && bundle.FechaTermina > DateTime.Now)
+                                {
+                                    bundlesDisponibles += 1;
+                                }
+                            }
+
+                            if (bundlesDisponibles == 0)
+                            {
+                                if (datos.Bundles.Count == 1)
+                                {
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String8"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
+                                }
+                                else if (datos.Bundles.Count > 1)
+                                {
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String9"), datos.Bundles.Count);
+                                }
+                            }
+                            else
+                            {
+                                if (bundlesDisponibles == 1)
+                                {
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String10"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
+                                }
+                                else if (bundlesDisponibles > 1)
+                                {
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String11"), bundlesDisponibles);
+                                }
+                            }
+                        }
+
+                        if (datos.Gratis?.Count > 0)
+                        {
+                            int gratisDisponibles = 0;
+
+                            foreach (var gratis in datos.Gratis)
+                            {
+                                if (gratis.FechaEmpieza < DateTime.Now && gratis.FechaTermina > DateTime.Now)
+                                {
+                                    gratisDisponibles += 1;
+                                }
+                            }
+
+                            if (gratisDisponibles == 0)
+                            {
+                                if (datos.Gratis.Count == 1)
+                                {
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String12"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
+                                }
+                                else if (datos.Gratis.Count > 1)
+                                {
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String13"), datos.Gratis.Count);
+                                }
+                            }
+                            else
+                            {
+                                if (gratisDisponibles == 1)
+                                {
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String14"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
+                                }
+                                else if (gratisDisponibles > 1)
+                                {
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String15"), gratisDisponibles);
+                                }
+                            }
+                        }
+
+                        if (datos.Suscripciones?.Count > 0)
+                        {
+                            int suscripcionesDisponibles = 0;
+
+                            foreach (var suscripcion in datos.Suscripciones)
+                            {
+                                if (suscripcion.FechaEmpieza < DateTime.Now && suscripcion.FechaTermina > DateTime.Now)
+                                {
+                                    suscripcionesDisponibles += 1;
+                                }
+                            }
+
+                            if (suscripcionesDisponibles == 0)
+                            {
+                                if (datos.Suscripciones.Count == 1)
+                                {
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String15"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
+                                }
+                                else if (datos.Suscripciones.Count > 1)
+                                {
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String16"), datos.Suscripciones.Count);
+                                }
+                            }
+                            else
+                            {
+                                if (suscripcionesDisponibles == 1)
+                                {
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String17"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
+                                }
+                                else if (suscripcionesDisponibles > 1)
+                                {
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String18"), suscripcionesDisponibles);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class OyenteMensaje
+    {
+        public string action { get; set; }
+        public string enlace { get; set; }
+    }
+}

@@ -1,0 +1,59 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_name__",
+  "description": "__MSG_description__",
+  "version": "0.10",
+  "author": "pepeizq",
+  "homepage_url": "https://github.com/pepeizq/pepeizq-deals-extension",
+  "icons": {
+    "16": "iconos/icono16.png",
+    "32": "iconos/icono32.png",
+    "48": "iconos/icono48.png",
+    "128": "iconos/icono128.png"
+  },
+  "default_locale": "en",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src *;"
+  },
+  "background": {
+    "service_worker": "background-chrome.js",
+    "type": "module"
+  },
+  //"background": {
+  //  "scripts": [ "background-firefox.js" ],
+  //  "type": "module"
+  //},
+  "content_scripts": [
+    {
+      "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],
+      "matches": [
+        "https://store.steampowered.com/app/*",
+        "https://store.steampowered.com/dlc/*",
+        "https://www.gog.com/*/game/*",
+        "https://store.epicgames.com/*/p/*"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://pepe.deals/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "admin@pepeizqdeals.com"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "framework/*",
+        "content/*",
+        "app.js",
+        "*.png",
+        "*.webp",
+        "*.ico",
+        "*.json"
+      ],
+      "matches": [ "<all_urls>" ]
+    }
+  ]
+}
