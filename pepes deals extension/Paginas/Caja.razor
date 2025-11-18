@@ -328,14 +328,21 @@
                 {
                     string enlace = "https://pepe.deals/extension/steam2/" + idSteam + "/" + DatosPersonales.Clave + "/";
 
-                    OyenteMensaje mensaje = new OyenteMensaje()
+                    if (DatosPersonales.NavegadorUsado == Navegador.Firefox)
                     {
-                        action = "ObtenerHtml",
-                        enlace = enlace
-                    };
+                        OyenteMensaje mensaje = new OyenteMensaje()
+                        {
+                            action = "ObtenerHtml",
+                            enlace = enlace
+                        };
 
-                    var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
-                    html = JsonSerializer.Serialize(respuesta);
+                        var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
+                        html = JsonSerializer.Serialize(respuesta);
+                    }
+                    else
+                    {
+                        html = await Herramientas.Decompiladores.Estandar(enlace);
+                    }
 
                     idDRM = 0;
                 }

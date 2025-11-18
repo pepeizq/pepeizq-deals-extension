@@ -19,7 +19,7 @@ namespace pepes_deals_extension
             {
 				if (browserExtension.Mode == BrowserExtensionMode.ContentScript)
 				{
-					builder.RootComponents.Add<Caja>("#pepeizqdeals");
+					builder.RootComponents.Add<Caja>("#pepedeals");
 				}
 				else
                 {
