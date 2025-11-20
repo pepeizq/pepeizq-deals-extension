@@ -19,10 +19,10 @@
   //  "service_worker": "background-chrome.js",
   //  "type": "module"
   //},
-  //"background": {
-  //  "scripts": [ "background-firefox.js" ],
-  //  "type": "module"
-  //},
+  "background": {
+    "scripts": [ "background-firefox.js" ],
+    "type": "module"
+  },
   "content_scripts": [
     {
       "js": [ "content/Blazor.BrowserExtension/ContentScript.js" ],

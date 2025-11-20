@@ -67,26 +67,33 @@
                         @WebExtensions.I18n.GetMessage("String3")
                     </div>
 
-                    <div>
-                        @{
-                            string mensajeMinimo = string.Empty;
+                    string mensajeMinimo = string.Empty;
 
-                            if (mejorActual != null)
-                            {
-                                if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
-                                {
-                                    mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(WebExtensions.I18n.GetMessage("String5"), tiendaHistorica.Nombre) + ")";
-                                }
-                            }
-
-                            if (string.IsNullOrEmpty(mensajeMinimo) == true)
-                            {
-                                mensajeMinimo = Herramientas.Precios.Euro(minimoHistorico.Precio) + " (" + string.Format(WebExtensions.I18n.GetMessage("String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, WebExtensions.I18n), tiendaHistorica.Nombre) + ")";
-                            }
+                    if (mejorActual != null)
+                    {
+                        if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
+                        {
+                            mensajeMinimo =  string.Format(WebExtensions.I18n.GetMessage("String5"), tiendaHistorica.Nombre);
                         }
+                    }
 
-                        @mensajeMinimo
-                    </div>     
+                    if (string.IsNullOrEmpty(mensajeMinimo) == true)
+                    {
+                        mensajeMinimo = string.Format(WebExtensions.I18n.GetMessage("String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, WebExtensions.I18n), tiendaHistorica.Nombre);
+                    }
+
+                    if (string.IsNullOrEmpty(mensajeMinimo) == false)
+                    {
+                        <div style="display: flex; align-items: baseline; gap: 8px;">
+                            <div style="background: color-mix(in srgb, var(--fondoSubsubcabecera) 25%, var(--fondoBotonPequeño)); padding: 5px 10px">
+                                @Herramientas.Precios.Euro(minimoHistorico.Precio)
+                            </div>
+
+                            <div style="font-size: 14px;">
+                                @mensajeMinimo
+                            </div>
+                        </div>
+                    }   
                 }
 
                 @if (string.IsNullOrEmpty(mensajeBundles) == false)
@@ -235,6 +242,8 @@
         font-family: 'Motiva Sans', Sans-serif;
         margin-bottom: 30px;
         font-size: 16px;
+        background: linear-gradient( -60deg, rgba(226,244,255,0.3) 5%,rgba(84, 107, 115, 0.3) 95%);
+        border-radius: 5px;
     }
 
     .pepeizq-caja-principal-6 {
