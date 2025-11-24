@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\background-chrome.js" />
+    <Content Remove="wwwroot\imagenes\iconos\epic.webp" />
+    <Content Remove="wwwroot\imagenes\iconos\gog.webp" />
+    <Content Remove="wwwroot\imagenes\iconos\steam.webp" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazor.BrowserExtension" Version="4.*" />
+    <PackageReference Include="Blazor.BrowserExtension" Version="4.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />
   </ItemGroup>

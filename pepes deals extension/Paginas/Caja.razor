@@ -4,8 +4,92 @@
 @using System.Globalization
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@using Herramientas
 
 @inject NavigationManager NavManager
+@inject IJSRuntime JavaScript
+
+<style>
+    :root {
+        --fondoSubsubcabecera: #293751;
+        --fondoSubcabecera: #222b44;
+        --fondoBoton: #146a9c;
+        --fondoBotonPequeño: #0d1621;
+        --fondoBotonPequeñoHover: #060a0f;
+        --fondoMinimo: #002c47;
+        --colorTexto: #f5f5f5;
+        --colorTextoHover: #b9e2fa;
+        --colorEnlace: #95c0fe;
+        --colorEnlaceHover: #3486fd;
+        --descuento: #006400;
+    }
+
+    .pepeizq-caja-principal {
+        padding: 5px 10px 10px 10px;
+        color: var(--colorTexto);
+        background: linear-gradient(180deg, var(--fondoSubsubcabecera) 0%, var(--fondoSubcabecera) 211.07%);
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
+    }
+
+    .pepeizq-caja-principal-0 {
+        font-family: 'Motiva Sans', Sans-serif;
+        margin-bottom: 30px;
+        font-size: 16px;
+        background: linear-gradient( -60deg, rgba(226,244,255,0.3) 5%,rgba(84, 107, 115, 0.3) 95%);
+        border-radius: 5px;
+    }
+
+    .pepeizq-caja-principal-6 {
+        font-family: 'Inter', Sans-serif;
+        font-size: 14px;
+        line-height: 22px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 5px;
+    }
+
+    .pepeizq-caja-principal-8 {
+        font-family: Lato GOG, Lato GOG Latin, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        margin-top: 20px;
+    }
+
+    .pepeizq-abrir-web {
+        color: var(--colorEnlace);
+        transition: transform .2s;
+    }
+
+        .pepeizq-abrir-web:hover {
+            color: var(--colorEnlaceHover);
+            transform: scale(1.01);
+        }
+
+    .pepeizq-caja-info {
+        background: color-mix(in srgb, var(--fondoSubsubcabecera) 65%, var(--fondoBotonPequeño));
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5),0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+        padding: 10px 15px;
+    }
+
+    .pepeizq-enlace {
+        background-color: var(--fondoBotonPequeño);
+        border: 2px solid var(--fondoBotonPequeño);
+        padding: 10px 20px;
+        color: var(--colorTexto);
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
+        transition: transform .2s;
+    }
+
+        .pepeizq-enlace:hover {
+            color: var(--colorTextoHover);
+            transform: scale(1.01);
+            background-color: var(--fondoBotonPequeñoHover);
+            border: 2px solid var(--colorTextoHover);
+        }
+
+</style>
 
 @if (idPepeizq > 0)
 {
@@ -29,7 +113,7 @@
                         if (datos.IdSteam > 0)
                         {
                             <a href="https://store.steampowered.com/app/@datos.IdSteam" target="_blank">
-                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/steam_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                                <img src="@navegadorFicheros://@idExtension/imagenes/iconos/steam.webp" style="max-width: 20px; max-height: 20px; display: flex;" />
                             </a>
                         }
                     }
@@ -39,7 +123,7 @@
                         if (string.IsNullOrEmpty(datos.SlugGog) == false)
                         {
                             <a href="https://www.gog.com/game/@datos.SlugGog" target="_blank">
-                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/gog_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                                <img src="@navegadorFicheros://@idExtension/imagenes/iconos/gog.webp" style="max-width: 20px; max-height: 20px; display: flex;" />
                             </a>
                         }
                     }
@@ -49,7 +133,7 @@
                         if (string.IsNullOrEmpty(datos.SlugEpic) == false)
                         {
                             <a href="https://store.epicgames.com/p/@datos.SlugEpic" target="_blank">
-                                <img src="@navegadorFicheros://@idExtension/imagenes/tiendas/epic_icono.ico" style="max-width: 16px; max-height: 16px;" />
+                                <img src="@navegadorFicheros://@idExtension/imagenes/iconos/epic.webp" style="max-width: 20px; max-height: 20px; display: flex;" />
                             </a>
                         }
                     }
@@ -61,8 +145,6 @@
             <div style="display: flex; flex-direction: column; gap: 5px;">
                 @if (minimoHistorico != null)
                 {
-                    Herramientas.Pepeizqdeals.Tienda tiendaHistorica = Herramientas.Pepeizqdeals.Tiendas.Buscar(minimoHistorico.Tienda);
-
                     <div>
                         @WebExtensions.I18n.GetMessage("String3")
                     </div>
@@ -71,22 +153,22 @@
 
                     if (mejorActual != null)
                     {
-                        if (mejorActual.Precio == minimoHistorico.Precio && mejorActual.Tienda == minimoHistorico.Tienda)
+                        if (mejorActual.Datos.Precio == minimoHistorico.Datos.Precio && mejorActual.Datos.Tienda == minimoHistorico.Datos.Tienda)
                         {
-                            mensajeMinimo =  string.Format(WebExtensions.I18n.GetMessage("String5"), tiendaHistorica.Nombre);
+                            mensajeMinimo =  string.Format(WebExtensions.I18n.GetMessage("String5"), minimoHistorico.Tienda);
                         }
                     }
 
                     if (string.IsNullOrEmpty(mensajeMinimo) == true)
                     {
-                        mensajeMinimo = string.Format(WebExtensions.I18n.GetMessage("String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.FechaDetectado, WebExtensions.I18n), tiendaHistorica.Nombre);
+                        mensajeMinimo = string.Format(WebExtensions.I18n.GetMessage("String4"), Herramientas.Calculadora.DiferenciaHaceTiempo(minimoHistorico.Datos.FechaDetectado, WebExtensions.I18n), minimoHistorico.Tienda);
                     }
 
                     if (string.IsNullOrEmpty(mensajeMinimo) == false)
                     {
-                        <div style="display: flex; align-items: baseline; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
                             <div style="background: color-mix(in srgb, var(--fondoSubsubcabecera) 25%, var(--fondoBotonPequeño)); padding: 5px 10px">
-                                @Herramientas.Precios.Euro(minimoHistorico.Precio)
+                                @Herramientas.Precios.Euro(minimoHistorico.Datos.Precio)
                             </div>
 
                             <div style="font-size: 14px;">
@@ -98,8 +180,15 @@
 
                 @if (string.IsNullOrEmpty(mensajeBundles) == false)
                 {
+                    string enlaceFinalBundles = enlaceBundles;
+
+                    if (string.IsNullOrEmpty(enlaceFinalBundles) == true)
+                    {
+                        enlaceFinalBundles = "https://pepe.deals/game/" + idPepeizq.ToString() + "/" + Herramientas.EnlaceAdaptador.Nombre(datos.Nombre) + "/#bundles";
+                    }
+
                     <div style="margin-top: 5px;">
-                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#bundles" target="_blank">
+                        <a href="@enlaceFinalBundles" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeBundles
                             </div>
@@ -109,8 +198,15 @@
 
                 @if (string.IsNullOrEmpty(mensajeGratis) == false)
                 {
+                    string enlaceFinalGratis = enlaceGratis;
+
+                    if (string.IsNullOrEmpty(enlaceFinalGratis) == true)
+                    {
+                        enlaceFinalGratis = "https://pepe.deals/game/" + idPepeizq.ToString() + "/" + Herramientas.EnlaceAdaptador.Nombre(datos.Nombre) + "/#gratis";
+                    }
+
                     <div style="margin-top: 5px;">
-                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#gratis" target="_blank">
+                        <a href="@enlaceFinalGratis" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeGratis
                             </div>
@@ -120,8 +216,15 @@
 
                 @if (string.IsNullOrEmpty(mensajeSuscripciones) == false)
                 {
+                    string enlaceFinalSuscripciones = enlaceSuscripciones;
+
+                    if (string.IsNullOrEmpty(enlaceFinalSuscripciones) == true)
+                    {
+                        enlaceFinalSuscripciones = "https://pepe.deals/game/" + idPepeizq.ToString() + "/" + Herramientas.EnlaceAdaptador.Nombre(datos.Nombre) + "/#suscripciones";
+                    }
+
                     <div style="margin-top: 5px;">
-                        <a href="https://pepe.deals/game/@idPepeizq/@Herramientas.EnlaceAdaptador.Nombre(datos.Nombre)/#suscripciones" target="_blank">
+                        <a href="@enlaceFinalSuscripciones" target="_blank">
                             <div class="pepeizq-abrir-web">
                                 @mensajeSuscripciones
                             </div>
@@ -164,50 +267,43 @@
                     </div>
 
                     <div class="pepeizq-enlace">
-                        <a href="@Herramientas.Pepeizqdeals.Tiendas.GenerarReferido(mejorActual.Tienda, mejorActual.Enlace)" style="color: inherit;" target="_blank">
+                        <a href="@mejorActual.Datos.Enlace" style="color: inherit;" target="_blank">
                             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
-                                @{
-                                    Herramientas.Pepeizqdeals.Tienda tienda = Herramientas.Pepeizqdeals.Tiendas.Buscar(mejorActual.Tienda);
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <img src="https://pepe.deals/@mejorActual.TiendaIcono" style="max-width: 20px; max-height: 20px;" />
 
-                                    if (tienda != null)
+                                    @if (idDRM == 0)
                                     {
-                                        <div style="display: flex; align-items: center; gap: 15px;">
-                                            <img src="@navegadorFicheros://@idExtension/@tienda.Icono" style="max-width: 20px; max-height: 20px;" />
-
-                                            @if (idDRM == 0)
-                                            {
-                                                <div>
-                                                    @tienda.Nombre
-                                                </div>
-                                            }
+                                        <div>
+                                            @mejorActual.Tienda
                                         </div>
                                     }
-                                }
+                                </div>
 
                                 <span style="flex: 1;"></span>
 
                                 <div style="padding: 10px 15px; background-color: var(--descuento);">
-                                    @mejorActual.Descuento%
+                                    @mejorActual.Datos.Descuento%
                                 </div>
 
                                 <div>
-                                    @if (mejorActual.PrecioCambiado > 0)
+                                    @if (mejorActual.Datos.PrecioCambiado > 0)
                                     {
-                                        @Herramientas.Precios.Euro(mejorActual.PrecioCambiado)
+                                        @Herramientas.Precios.Euro(mejorActual.Datos.PrecioCambiado)
                                     }
                                     else
                                     {
-                                        @Herramientas.Precios.Euro(mejorActual.Precio)
+                                        @Herramientas.Precios.Euro(mejorActual.Datos.Precio)
                                     }
                                 </div>
                             </div>
                         </a>
                     </div>
 
-                    @if (string.IsNullOrEmpty(mejorActual.CodigoTexto) == false)
+                    @if (string.IsNullOrEmpty(mejorActual.Datos.CodigoTexto) == false)
                     {
                         <div style="text-align: right; margin-right: 10px; font-size: 14px;">
-                            @string.Format(WebExtensions.I18n.GetMessage("String7"), mejorActual.CodigoTexto)
+                            @string.Format(WebExtensions.I18n.GetMessage("String7"), mejorActual.Datos.CodigoTexto)
                         </div>
                     }
                 </div>
@@ -216,85 +312,9 @@
     </div>
 }
 
-<style>
-    :root {
-        --fondoSubsubcabecera: #293751;
-        --fondoSubcabecera: #222b44;
-        --fondoBoton: #146a9c;
-        --fondoBotonPequeño: #0d1621;
-        --fondoBotonPequeñoHover: #060a0f;
-        --fondoMinimo: #002c47;
-        --colorTexto: #f5f5f5;
-        --colorTextoHover: #b9e2fa;
-        --colorEnlace: #95c0fe;
-        --colorEnlaceHover: #3486fd;
-        --descuento: #006400;
-    }
-
-    .pepeizq-caja-principal {
-        padding: 5px 10px 10px 10px;
-        color: var(--colorTexto);
-        background: linear-gradient(180deg, var(--fondoSubsubcabecera) 0%, var(--fondoSubcabecera) 211.07%);
-        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
-    }
-
-    .pepeizq-caja-principal-0 {
-        font-family: 'Motiva Sans', Sans-serif;
-        margin-bottom: 30px;
-        font-size: 16px;
-        background: linear-gradient( -60deg, rgba(226,244,255,0.3) 5%,rgba(84, 107, 115, 0.3) 95%);
-        border-radius: 5px;
-    }
-
-    .pepeizq-caja-principal-6 {
-        font-family: 'Inter', Sans-serif;
-        font-size: 14px;
-        line-height: 22px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .pepeizq-caja-principal-8 {
-        font-family: Lato GOG, Lato GOG Latin, sans-serif;
-        font-size: 15px;
-        line-height: 22px;
-        margin-top: 20px;
-    }
-
-    .pepeizq-abrir-web {
-        color: var(--colorEnlace);
-        transition: transform .2s;
-    }
-
-    .pepeizq-abrir-web:hover {
-        color: var(--colorEnlaceHover);
-        transform: scale(1.01);
-    }
-
-    .pepeizq-caja-info {
-        background: color-mix(in srgb, var(--fondoSubsubcabecera) 65%, var(--fondoBotonPequeño));
-        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.5),0px 0px 1px 0px rgba(0, 0, 0, 0.5);
-        padding: 10px 15px;
-    }
-
-    .pepeizq-enlace {
-        background-color: var(--fondoBotonPequeño);
-        border: 2px solid var(--fondoBotonPequeño);
-        padding: 10px 20px;
-        color: var(--colorTexto);
-        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.28),0px 0px 2px 0px rgba(0, 0, 0, 0.24);
-        transition: transform .2s;
-    }
-
-    .pepeizq-enlace:hover {
-        color: var(--colorTextoHover);
-        transform: scale(1.01);
-        background-color: var(--fondoBotonPequeñoHover);
-        border: 2px solid var(--colorTextoHover);
-    }
-</style>
-
 @code {
+
+    #nullable disable
 
     private string navegadorFicheros = string.Empty;
 
@@ -303,13 +323,16 @@
     private int idPepeizq = 0;
     private int idDRM = 0;
 
-    private Herramientas.Pepeizqdeals.Json datos = null;
-    private Herramientas.Pepeizqdeals.JsonPrecio minimoHistorico = null;
-    private Herramientas.Pepeizqdeals.JsonPrecio mejorActual = null;
+    private Json datos = null;
+    private JsonPrecio minimoHistorico = null;
+    private JsonPrecio mejorActual = null;
 
     private string mensajeBundles = null;
+    private string enlaceBundles = null;
     private string mensajeGratis = null;
+    private string enlaceGratis = null;
     private string mensajeSuscripciones = null;
+    private string enlaceSuscripciones = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -337,21 +360,14 @@
                 {
                     string enlace = "https://pepe.deals/extension/steam2/" + idSteam + "/" + DatosPersonales.Clave + "/";
 
-                    if (DatosPersonales.NavegadorUsado == Navegador.Firefox)
+                    OyenteMensaje mensaje = new OyenteMensaje()
                     {
-                        OyenteMensaje mensaje = new OyenteMensaje()
-                        {
-                            action = "ObtenerHtml",
-                            enlace = enlace
-                        };
+                        action = "ObtenerHtml",
+                        enlace = enlace
+                    };
 
-                        var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
-                        html = JsonSerializer.Serialize(respuesta);
-                    }
-                    else
-                    {
-                        html = await Herramientas.Decompiladores.Estandar(enlace);
-                    }
+                    var respuesta = await WebExtensions.Runtime.SendMessage(mensaje);
+                    html = JsonSerializer.Serialize(respuesta);
 
                     idDRM = 0;
                 }
@@ -405,7 +421,7 @@
                     PropertyNameCaseInsensitive = true
                 };
 
-                datos = JsonSerializer.Deserialize<Herramientas.Pepeizqdeals.Json>(html, opciones);
+                datos = JsonSerializer.Deserialize<Json>(html, opciones);
 
                 if (datos != null)
                 {
@@ -417,13 +433,13 @@
                         {
                             foreach (var historico in datos.Historicos)
                             {
-                                if (historico.DRM == idDRM)
+                                if (historico.Datos.DRM == idDRM)
                                 {
                                     minimoHistorico = historico;
 
-                                    if (minimoHistorico.PrecioCambiado > 0)
+                                    if (minimoHistorico.Datos.PrecioCambiado > 0)
                                     {
-                                        minimoHistorico.Precio = minimoHistorico.PrecioCambiado;
+                                        minimoHistorico.Datos.Precio = minimoHistorico.Datos.PrecioCambiado;
                                     }
                                 }
                             }
@@ -435,27 +451,16 @@
 
                             foreach (var actual in datos.Actuales)
                             {
-                                if (actual.DRM == idDRM && DateTime.Now.Subtract(actual.FechaActualizacion) < TimeSpan.FromHours(24))
+                                if (actual.Datos.DRM == idDRM && DateTime.Now.Subtract(actual.Datos.FechaActualizacion) < TimeSpan.FromHours(24))
                                 {
-                                    if (actual.Moneda != 0 && actual.PrecioCambiado == 0)
+                                    if (actual.Datos.Moneda != 0 && actual.Datos.PrecioCambiado > 0)
                                     {
-                                        if (actual.Moneda == 1)
-                                        {
-                                            actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Dolar);
-                                        }
-                                        else if (actual.Moneda == 2)
-                                        {
-                                            actual.Precio = Herramientas.Divisas.Cambio(actual.Precio, datos.Libra);
-                                        }
-                                    }
-                                    else if (actual.Moneda != 0 && actual.PrecioCambiado > 0)
-                                    {
-                                        actual.Precio = actual.PrecioCambiado;
+                                        actual.Datos.Precio = actual.Datos.PrecioCambiado;
                                     }
 
-                                    if (actual.Precio < precioMaximo)
+                                    if (actual.Datos.Precio < precioMaximo)
                                     {
-                                        precioMaximo = actual.Precio;
+                                        precioMaximo = actual.Datos.Precio;
                                         mejorActual = actual;
                                     }
                                 }
@@ -465,11 +470,29 @@
                         if (datos.Bundles?.Count > 0)
                         {
                             int bundlesDisponibles = 0;
+                            string nombreBundle = string.Empty;
+                            string tiendaBundle = string.Empty;
+                            string enlaceBundle = string.Empty;
 
                             foreach (var bundle in datos.Bundles)
                             {
-                                if (bundle.FechaEmpieza < DateTime.Now && bundle.FechaTermina > DateTime.Now)
+                                if (string.IsNullOrEmpty(nombreBundle) == true && string.IsNullOrEmpty(tiendaBundle) == true &&
+                                    string.IsNullOrEmpty(enlaceBundle) == true)
                                 {
+                                    nombreBundle = bundle.NombreBundle;
+                                    tiendaBundle = bundle.TiendaBundle;
+                                    enlaceBundle = bundle.Datos.Enlace;
+                                }
+
+                                if (bundle.Datos.FechaEmpieza <= DateTime.Now && bundle.Datos.FechaTermina >= DateTime.Now)
+                                {
+                                    if (bundlesDisponibles == 0)
+                                    {
+                                        nombreBundle = bundle.NombreBundle;
+                                        tiendaBundle = bundle.TiendaBundle;
+                                        enlaceBundle = bundle.Datos.Enlace;
+                                    }
+
                                     bundlesDisponibles += 1;
                                 }
                             }
@@ -478,7 +501,7 @@
                             {
                                 if (datos.Bundles.Count == 1)
                                 {
-                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String8"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String8"), tiendaBundle, nombreBundle);
                                 }
                                 else if (datos.Bundles.Count > 1)
                                 {
@@ -489,7 +512,8 @@
                             {
                                 if (bundlesDisponibles == 1)
                                 {
-                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String10"), Herramientas.Pepeizqdeals.Bundles.DevolverNombre(datos.Bundles[0].Tipo));
+                                    enlaceBundles = enlaceBundle;
+                                    mensajeBundles = string.Format(WebExtensions.I18n.GetMessage("String10"), tiendaBundle, nombreBundle);
                                 }
                                 else if (bundlesDisponibles > 1)
                                 {
@@ -501,11 +525,25 @@
                         if (datos.Gratis?.Count > 0)
                         {
                             int gratisDisponibles = 0;
+                            string nombreGratis2 = string.Empty;
+                            string enlaceGratis2 = string.Empty;
 
                             foreach (var gratis in datos.Gratis)
                             {
-                                if (gratis.FechaEmpieza < DateTime.Now && gratis.FechaTermina > DateTime.Now)
+                                if (string.IsNullOrEmpty(nombreGratis2) == true && string.IsNullOrEmpty(enlaceGratis2) == true)
                                 {
+                                    nombreGratis2 = gratis.NombreGratis;
+                                    enlaceGratis2 = gratis.Datos.Enlace;
+                                }
+
+                                if (gratis.Datos.FechaEmpieza <= DateTime.Now && gratis.Datos.FechaTermina >= DateTime.Now)
+                                {
+                                    if (gratisDisponibles == 0)
+                                    {
+                                        nombreGratis2 = gratis.NombreGratis;
+                                        enlaceGratis2 = gratis.Datos.Enlace;
+                                    }
+
                                     gratisDisponibles += 1;
                                 }
                             }
@@ -514,7 +552,7 @@
                             {
                                 if (datos.Gratis.Count == 1)
                                 {
-                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String12"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String12"), nombreGratis2);
                                 }
                                 else if (datos.Gratis.Count > 1)
                                 {
@@ -525,7 +563,8 @@
                             {
                                 if (gratisDisponibles == 1)
                                 {
-                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String14"), Herramientas.Pepeizqdeals.Gratis.DevolverNombre(datos.Gratis[0].Tipo));
+                                    enlaceGratis = enlaceGratis2;
+                                    mensajeGratis = string.Format(WebExtensions.I18n.GetMessage("String14"), nombreGratis2);
                                 }
                                 else if (gratisDisponibles > 1)
                                 {
@@ -537,11 +576,25 @@
                         if (datos.Suscripciones?.Count > 0)
                         {
                             int suscripcionesDisponibles = 0;
+                            string nombreSuscripcion = string.Empty;
+                            string enlaceSuscripcion = string.Empty;
 
                             foreach (var suscripcion in datos.Suscripciones)
                             {
-                                if (suscripcion.FechaEmpieza < DateTime.Now && suscripcion.FechaTermina > DateTime.Now)
+                                if (string.IsNullOrEmpty(nombreSuscripcion) == true && string.IsNullOrEmpty(enlaceSuscripcion) == true)
                                 {
+                                    nombreSuscripcion = suscripcion.NombreSuscripcion;
+                                    enlaceSuscripcion = suscripcion.Datos.Enlace;
+                                }
+
+                                if (suscripcion.Datos.FechaEmpieza <= DateTime.Now && suscripcion.Datos.FechaTermina >= DateTime.Now)
+                                {
+                                    if (suscripcionesDisponibles == 0)
+                                    {
+                                        nombreSuscripcion = suscripcion.NombreSuscripcion;
+                                        enlaceSuscripcion = suscripcion.Datos.Enlace;
+                                    }
+
                                     suscripcionesDisponibles += 1;
                                 }
                             }
@@ -550,7 +603,7 @@
                             {
                                 if (datos.Suscripciones.Count == 1)
                                 {
-                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String15"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String15"), nombreSuscripcion);
                                 }
                                 else if (datos.Suscripciones.Count > 1)
                                 {
@@ -561,7 +614,8 @@
                             {
                                 if (suscripcionesDisponibles == 1)
                                 {
-                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String17"), Herramientas.Pepeizqdeals.Suscripciones.DevolverNombre(datos.Suscripciones[0].Tipo));
+                                    enlaceSuscripciones = enlaceSuscripcion;
+                                    mensajeSuscripciones = string.Format(WebExtensions.I18n.GetMessage("String17"), nombreSuscripcion);
                                 }
                                 else if (suscripcionesDisponibles > 1)
                                 {

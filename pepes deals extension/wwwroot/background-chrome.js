@@ -1,7 +1,10 @@
-﻿chrome.runtime.onMessage.addListener(async (msg) => {
+﻿chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+
     if (msg.action === "ObtenerHtml") {
-        const res = await fetch(msg.enlace, { cache: "no-store" });
-        const data = await res.json();
-        return data;
+        fetch(msg.enlace, { cache: "no-store" })
+            .then(res => res.json())
+            .then(data => sendResponse(data));
+
+        return true; 
     }
 });

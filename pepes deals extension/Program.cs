@@ -1,10 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Blazor.BrowserExtension;
+﻿using Blazor.BrowserExtension;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using pepes_deals_extension.Paginas;
 
 namespace pepes_deals_extension

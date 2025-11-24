@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+#nullable disable
+
 using System.Text.Json.Serialization;
 
-namespace Herramientas.Pepeizqdeals
+namespace Herramientas
 {
 	public class Json
 	{
@@ -39,14 +40,21 @@ namespace Herramientas.Pepeizqdeals
 		[JsonPropertyName("slugEpic")]
 		public string SlugEpic { get; set; }
 
-		[JsonPropertyName("dolar")]
-		public decimal Dolar { get; set; }
-
-		[JsonPropertyName("libra")]
-		public decimal Libra { get; set; }
 	}
 
 	public class JsonPrecio
+	{
+		[JsonPropertyName("datos")]
+		public JsonPrecio2 Datos { get; set; }
+
+		[JsonPropertyName("tienda")]
+		public string Tienda { get; set; }
+
+		[JsonPropertyName("tiendaIcono")]
+		public string TiendaIcono { get; set; }
+	}
+
+	public class JsonPrecio2
 	{
 		[JsonPropertyName("descuento")]
 		public int Descuento { get; set; }
@@ -84,6 +92,21 @@ namespace Herramientas.Pepeizqdeals
 
 	public class JsonBundle
 	{
+		[JsonPropertyName("datos")]
+		public JsonBundle2 Datos { get; set; }
+
+		[JsonPropertyName("nombreBundle")]
+		public string NombreBundle { get; set; }
+
+		[JsonPropertyName("tiendaBundle")]
+		public string TiendaBundle { get; set; }
+
+		[JsonPropertyName("iconoBundle")]
+		public string IconoBundle { get; set; }
+	}
+
+	public class JsonBundle2
+	{
 		[JsonPropertyName("tipo")]
 		public int Tipo { get; set; }
 
@@ -98,24 +121,24 @@ namespace Herramientas.Pepeizqdeals
 
 		[JsonPropertyName("fechaTermina")]
 		public DateTime FechaTermina { get; set; }
+
+		[JsonPropertyName("enlace")]
+		public string Enlace { get; set; }
 	}
 
 	public class JsonGratis
 	{
-		[JsonPropertyName("tipo")]
-		public int Tipo { get; set; }
+		[JsonPropertyName("datos")]
+		public JsonGratis2 Datos { get; set; }
 
-		[JsonPropertyName("drm")]
-		public int DRM { get; set; }
+		[JsonPropertyName("nombreGratis")]
+		public string NombreGratis { get; set; }
 
-		[JsonPropertyName("fechaEmpieza")]
-		public DateTime FechaEmpieza { get; set; }
-
-		[JsonPropertyName("fechaTermina")]
-		public DateTime FechaTermina { get; set; }
+		[JsonPropertyName("iconoGratis")]
+		public string IconoGratis { get; set; }
 	}
 
-	public class JsonSuscripcion
+	public class JsonGratis2
 	{
 		[JsonPropertyName("tipo")]
 		public int Tipo { get; set; }
@@ -128,5 +151,38 @@ namespace Herramientas.Pepeizqdeals
 
 		[JsonPropertyName("fechaTermina")]
 		public DateTime FechaTermina { get; set; }
+
+		[JsonPropertyName("enlace")]
+		public string Enlace { get; set; }
+	}
+
+	public class JsonSuscripcion
+	{
+		[JsonPropertyName("datos")]
+		public JsonSuscripcion2 Datos { get; set; }
+
+		[JsonPropertyName("nombreSuscripcion")]
+		public string NombreSuscripcion { get; set; }
+
+		[JsonPropertyName("iconoSuscripcion")]
+		public string IconoSuscripcion { get; set; }
+	}
+
+	public class JsonSuscripcion2
+	{
+		[JsonPropertyName("tipo")]
+		public int Tipo { get; set; }
+
+		[JsonPropertyName("drm")]
+		public int DRM { get; set; }
+
+		[JsonPropertyName("fechaEmpieza")]
+		public DateTime FechaEmpieza { get; set; }
+
+		[JsonPropertyName("fechaTermina")]
+		public DateTime FechaTermina { get; set; }
+
+		[JsonPropertyName("enlace")]
+		public string Enlace { get; set; }
 	}
 }

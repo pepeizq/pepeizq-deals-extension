@@ -30,14 +30,6 @@ namespace pepes_deals_extension
             if (mensaje.AdditionalData != null)
             {
                 string accion = mensaje.AdditionalData["action"]?.ToString() ?? string.Empty;
-                
-                if (accion == "ObtenerUseragent")
-                {
-                    var resultado = WebExtensions.Runtime.GetBrowserInfo();
-                    var resultado2 = JsonSerializer.Serialize(resultado);
-
-                    return resultado2;
-				}
 
                 if (accion == "ObtenerHtml")
                 {
