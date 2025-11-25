@@ -16,7 +16,7 @@
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
   },
   "background": {
-    "scripts": [ "background-firefox.js" ],
+    "service_worker": "background-chrome.js",
     "type": "module"
   },
   "content_scripts": [
@@ -32,17 +32,6 @@
       ]
     }
   ],
-  "host_permissions": [
-    "https://pepe.deals/*"
-  ],
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "admin@pepe.deals",
-      "data_collection_permissions": {
-        "required": [ "none" ]
-      }
-    }
-  },
   "web_accessible_resources": [
     {
       "resources": [
